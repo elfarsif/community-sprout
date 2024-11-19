@@ -1,4 +1,4 @@
-package org.frank;
+package org.frank.main;
 
 import javax.swing.*;
 
@@ -16,5 +16,7 @@ public class Main {
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+        gamePanel.startGameThread();
     }
 }
