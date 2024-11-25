@@ -1,9 +1,10 @@
 package org.frank.entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    public int x,y;
+    public int worldX, worldY;
     public int speed;
     public BufferedImage down1,down2,down3,down4,down5,down6,
             up1,up2,up3,up4,up5,up6
@@ -13,4 +14,7 @@ public class Entity {
 
     int spriteCounter = 0;
     int spriteNumber =1;
+
+    public Rectangle solidArea;
+    public Boolean collisionOn = false;
 }

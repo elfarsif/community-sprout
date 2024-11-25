@@ -1,6 +1,7 @@
 package org.frank.main;
 
 import org.frank.entity.Player;
+import org.frank.tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,18 +9,27 @@ import java.awt.*;
 public class GamePanel extends JPanel implements Runnable{
 
     //SCREEN SETTINGS
-    final int originalTileSize = 16;
+    public final int originalTileSize = 16;
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+    public final int maxScreenCol = 20;
+    public final int maxScreenRow = 10;
+    public final int screenWidth = tileSize * maxScreenCol;//3200
+    public final int screenHeight = tileSize * maxScreenRow;//1600
+
+    //WORLD SETTINGS
+    public final int maxWorldCol = 19;
+    public final int maxWorldRow = 19;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
+
 
     KeyHandler keyHandler = new KeyHandler();
     public Thread gameThread;
-    Player player = new Player(this, keyHandler);
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
+    public Player player = new Player(this, keyHandler);
+    public TileManager tileManager = new TileManager(this);
 
     int FPS = 60;
 
@@ -54,6 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
     }
+
     public void update(){
         player.update();
     }
@@ -62,7 +73,10 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
+
+        tileManager.draw(g2d);
         player.draw(g2d);
+
         g2d.dispose();
     }
 }
