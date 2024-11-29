@@ -25,6 +25,8 @@ public class Player extends Entity{
         solidArea = new Rectangle();
         solidArea.x = 0;
         solidArea.y = 0;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         solidArea.width = gamePanel.tileSize;
         solidArea.height = gamePanel.tileSize;
 
@@ -42,7 +44,7 @@ public class Player extends Entity{
 
     public void getPlayerImage() {
         try {
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down1.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
             down2 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down2.png"));
             down3 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down3.png"));
             down4 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down4.png"));
@@ -166,7 +168,7 @@ public class Player extends Entity{
                 break;
         }
 
-        g2d.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2d.drawImage(image, screenX, screenY, (int)(gamePanel.tileSize*2),(int) (gamePanel.tileSize*2), null);
 
     }
 }

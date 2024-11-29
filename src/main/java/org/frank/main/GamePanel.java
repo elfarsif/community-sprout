@@ -1,6 +1,7 @@
 package org.frank.main;
 
 import org.frank.entity.Player;
+import org.frank.object.SuperObject;
 import org.frank.tile.TileManager;
 
 import javax.swing.*;
@@ -13,8 +14,8 @@ public class GamePanel extends JPanel implements Runnable{
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;
-    public final int maxScreenCol = 20;
-    public final int maxScreenRow = 10;
+    public final int maxScreenCol = 25;
+    public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol;//3200
     public final int screenHeight = tileSize * maxScreenRow;//1600
 
@@ -28,8 +29,10 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyHandler = new KeyHandler();
     public Thread gameThread;
     public CollisionChecker collisionChecker = new CollisionChecker(this);
+    public AssetSetter assetSetter = new AssetSetter(this);
     public Player player = new Player(this, keyHandler);
     public TileManager tileManager = new TileManager(this);
+    public SuperObject objects[] = new SuperObject[10];
 
     int FPS = 60;
 
@@ -44,6 +47,10 @@ public class GamePanel extends JPanel implements Runnable{
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void setupGame(){
+        assetSetter.setObject();
     }
 
     @Override
@@ -75,6 +82,13 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2d = (Graphics2D) g;
 
         tileManager.draw(g2d);
+
+        //paint objects
+        for(int i = 0; i < objects.length; i++){
+            if(objects[i] != null){
+                objects[i].draw(g2d, this);
+            }
+        }
         player.draw(g2d);
 
         g2d.dispose();
