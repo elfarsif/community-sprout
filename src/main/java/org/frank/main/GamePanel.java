@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     //System
     KeyHandler keyHandler = new KeyHandler();
-    Sound sound = new Sound();
+    public Sound sound = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public TileManager tileManager = new TileManager(this);
@@ -52,6 +52,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setupGame(){
         assetSetter.setObject();
+        playMusic(0);
     }
 
     @Override

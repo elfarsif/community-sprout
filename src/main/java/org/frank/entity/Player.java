@@ -124,6 +124,7 @@ public class Player extends Entity{
                 case "mushroom":
                     hasMushroom++;
                     gamePanel.objects[objectIndex] = null;
+                    gamePanel.playSoundEffect(1);
                     break;
                 case "door":
                     if (hasMushroom>0){

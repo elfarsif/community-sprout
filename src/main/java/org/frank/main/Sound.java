@@ -20,6 +20,7 @@ public class Sound {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundUrl[i]);
             clip = AudioSystem.getClip();
             clip.open(ais);
+            System.out.println("Sound loaded");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -28,14 +29,15 @@ public class Sound {
 
     public void play(){
         clip.start();
+        System.out.println("Sound played");
     }
 
     public void stop(){
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.stop();
     }
 
     public void loop(){
-        clip.stop();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
 }
