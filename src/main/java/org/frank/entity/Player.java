@@ -13,6 +13,7 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
+    int hasMushroom=0;
 
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
@@ -36,38 +37,22 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues(){
-        worldX = gamePanel.tileSize * 5;
-        worldY = gamePanel.tileSize * 5;
+        worldX = gamePanel.tileSize * 10;
+        worldY = gamePanel.tileSize * 15;
         speed=4;
         direction = "down";
     }
 
     public void getPlayerImage() {
         try {
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down1.png"));
             down2 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down2.png"));
-            down3 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down3.png"));
-            down4 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down4.png"));
-            down5 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down5.png"));
-            down6 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down6.png"));
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/walking/up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/walking/up2.png"));
-            up3 = ImageIO.read(getClass().getResourceAsStream("/player/walking/up3.png"));
-            up4 = ImageIO.read(getClass().getResourceAsStream("/player/walking/up4.png"));
-            up5 = ImageIO.read(getClass().getResourceAsStream("/player/walking/up5.png"));
-            up6 = ImageIO.read(getClass().getResourceAsStream("/player/walking/up6.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/walking/left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/walking/left2.png"));
-            left3 = ImageIO.read(getClass().getResourceAsStream("/player/walking/left3.png"));
-            left4 = ImageIO.read(getClass().getResourceAsStream("/player/walking/left4.png"));
-            left5 = ImageIO.read(getClass().getResourceAsStream("/player/walking/left5.png"));
-            left6 = ImageIO.read(getClass().getResourceAsStream("/player/walking/left6.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/walking/right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/walking/right2.png"));
-            right3 = ImageIO.read(getClass().getResourceAsStream("/player/walking/right3.png"));
-            right4 = ImageIO.read(getClass().getResourceAsStream("/player/walking/right4.png"));
-            right5 = ImageIO.read(getClass().getResourceAsStream("/player/walking/right5.png"));
-            right6 = ImageIO.read(getClass().getResourceAsStream("/player/walking/right6.png"));
+            up1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
         } catch (Exception e) {
             throw new RuntimeException("Error reading image :"+e);
         }
@@ -96,6 +81,10 @@ public class Player extends Entity{
             //check tile collision
             collisionOn = false;
             gamePanel.collisionChecker.checkTile(this);
+
+            //check object collision
+            int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
+            pickUpObject(objectIndex);
 
             if(!collisionOn){
                 switch (direction){
@@ -128,9 +117,25 @@ public class Player extends Entity{
 
     }
 
+    public void pickUpObject(int objectIndex){
+        if(objectIndex != 999){
+            String objectName = gamePanel.objects[objectIndex].name;
+            switch (objectName){
+                case "mushroom":
+                    hasMushroom++;
+                    gamePanel.objects[objectIndex] = null;
+                    break;
+                case "door":
+                    if (hasMushroom>0){
+                        hasMushroom--;
+                        gamePanel.objects[objectIndex] = null;
+                    }
+                    break;
+            }
+        }
+    }
+
     public void draw(Graphics2D g2d){
-/*        g2d.setColor(Color.WHITE);
-        g2d.fillRect(x, y, gamePanel.tileSize, gamePanel.tileSize);*/
         BufferedImage image = null;
 
         switch (direction){

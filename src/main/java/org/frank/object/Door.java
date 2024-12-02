@@ -10,5 +10,6 @@ public class Door extends SuperObject{
         }catch (Exception e){
             throw new RuntimeException("Error loading image Door:"+e);
         }
+        collision = true;
     }
 }
