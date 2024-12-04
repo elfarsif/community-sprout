@@ -29,7 +29,9 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public TileManager tileManager = new TileManager(this);
+    public UI ui = new UI(this);
     public Thread gameThread;
+
 
     //ENTITIES AND OBJECTS
     public Player player = new Player(this, keyHandler);
@@ -91,7 +93,13 @@ public class GamePanel extends JPanel implements Runnable{
                 objects[i].draw(g2d, this);
             }
         }
+
+        //PLAYER
         player.draw(g2d);
+
+        //UI
+        ui.draw(g2d);
+
 
         g2d.dispose();
     }

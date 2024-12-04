@@ -13,7 +13,7 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
-    int hasMushroom=0;
+    public int hasMushroom=0;
 
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
@@ -125,11 +125,18 @@ public class Player extends Entity{
                     hasMushroom++;
                     gamePanel.objects[objectIndex] = null;
                     gamePanel.playSoundEffect(1);
+                    gamePanel.ui.showMessage("You got a key");
                     break;
                 case "door":
                     if (hasMushroom>0){
                         hasMushroom--;
                         gamePanel.objects[objectIndex] = null;
+                        gamePanel.ui.showMessage("You opened the door");
+                        //FINISH GAME
+                        gamePanel.stopMusic();
+                        gamePanel.ui.gameFInished = true;
+                    }else{
+                        gamePanel.ui.showMessage("You need a key");
                     }
                     break;
             }
