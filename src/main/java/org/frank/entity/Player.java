@@ -8,27 +8,27 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
-    GamePanel gamePanel;
     KeyHandler keyHandler;
 
     public final int screenX;
     public final int screenY;
 
 
-    public Player(GamePanel gamePanel, KeyHandler keyHandler) {
-        this.gamePanel = gamePanel;
+    public Player(GamePanel gp, KeyHandler keyHandler) {
+        super(gp);
+
         this.keyHandler = keyHandler;
 
-        screenX = gamePanel.screenWidth / 2 - gamePanel.tileSize / 2;
-        screenY = gamePanel.screenHeight / 2 - gamePanel.tileSize / 2;
+        screenX = gp.screenWidth / 2 - gp.tileSize / 2;
+        screenY = gp.screenHeight / 2 - gp.tileSize / 2;
 
         solidArea = new Rectangle();
         solidArea.x = 0;
         solidArea.y = 0;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = gamePanel.tileSize;
-        solidArea.height = gamePanel.tileSize;
+        solidArea.width = gp.tileSize;
+        solidArea.height = gp.tileSize;
 
 
         setDefaultValues();
@@ -36,25 +36,22 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues(){
-        worldX = gamePanel.tileSize * 10;
-        worldY = gamePanel.tileSize * 15;
+        worldX = gp.tileSize * 10;
+        worldY = gp.tileSize * 15;
         speed=4;
         direction = "down";
     }
 
     public void getPlayerImage() {
-        try {
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/player/walking/down2.png"));
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/standing/character.png"));
-        } catch (Exception e) {
-            throw new RuntimeException("Error reading image :"+e);
-        }
+        down1 = setup("/player/walking/down1.png");
+        down2 = setup("/player/walking/down2.png");
+        up1 = setup("/player/standing/character.png");
+        up2 = setup("/player/standing/character.png");
+        left1 = setup("/player/standing/character.png");
+        left2 = setup("/player/standing/character.png");
+        right1 = setup("/player/standing/character.png");
+        right2 = setup("/player/standing/character.png");
+
     }
 
     public void update(){
@@ -79,11 +76,15 @@ public class Player extends Entity{
 
             //check tile collision
             collisionOn = false;
-            gamePanel.collisionChecker.checkTile(this);
+            gp.collisionChecker.checkTile(this);
 
             //check object collision
-            int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
+            int objectIndex = gp.collisionChecker.checkObject(this, true);
             pickUpObject(objectIndex);
+
+            //check npc collisionk
+            int npcIndex = gp.collisionChecker.checkEntity(this,gp.npc);
+            interactNPC(npcIndex);
 
             if(!collisionOn){
                 switch (direction){
@@ -114,6 +115,12 @@ public class Player extends Entity{
             }
         }
 
+    }
+
+    private void interactNPC(int i) {
+        if(i != 999){
+            System.out.println("Interacting with NPC");
+        }
     }
 
     public void pickUpObject(int objectIndex){
@@ -160,7 +167,7 @@ public class Player extends Entity{
                 break;
         }
 
-        g2d.drawImage(image, screenX, screenY, (int)(gamePanel.tileSize*2),(int) (gamePanel.tileSize*2), null);
+        g2d.drawImage(image, screenX, screenY, (int)(gp.tileSize*2),(int) (gp.tileSize*2), null);
 
     }
 }

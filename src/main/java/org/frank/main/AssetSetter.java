@@ -1,27 +1,28 @@
 package org.frank.main;
 
+import org.frank.entity.Oscael;
 import org.frank.object.Door;
 import org.frank.object.Mushroom;
 
 public class AssetSetter {
 
-    GamePanel gamePanel;
+    GamePanel gp;
 
-    public AssetSetter(GamePanel gamePanel){
-        this.gamePanel = gamePanel;
+    public AssetSetter(GamePanel gp){
+        this.gp = gp;
     }
 
     public void setObject(){
-        gamePanel.objects[0] = new Mushroom();
-        gamePanel.objects[0].worldX = 2 * gamePanel.tileSize;
-        gamePanel.objects[0].worldY = 4 * gamePanel.tileSize;
+        gp.objects[0] = new Mushroom();
+        gp.objects[0].worldX = 2 * gp.tileSize;
+        gp.objects[0].worldY = 4 * gp.tileSize;
 
-        gamePanel.objects[1] = new Mushroom();
-        gamePanel.objects[1].worldX = 6 * gamePanel.tileSize;
-        gamePanel.objects[1].worldY = 4 * gamePanel.tileSize;
 
-        gamePanel.objects[2] = new Door();
-        gamePanel.objects[2].worldX = 10 * gamePanel.tileSize;
-        gamePanel.objects[2].worldY = 10 * gamePanel.tileSize;
+    }
+
+    public void setNPC(){
+        gp.npc[0] = new Oscael(gp);
+        gp.npc[0].worldX = 3 * gp.tileSize;
+        gp.npc[0].worldY = 3 * gp.tileSize;
     }
 }
