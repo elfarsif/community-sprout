@@ -1,25 +1,20 @@
 package org.frank.main;
 
-import org.frank.object.Mushroom;
-
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class UI {
 
-    GamePanel gP;
+    GamePanel gp;
     Font arial_40;
-    BufferedImage mushroomImage;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
     public boolean gameFInished = false;
+    Graphics2D g2d;
 
-    public UI(GamePanel gP){
-        this.gP = gP;
+    public UI(GamePanel gp){
+        this.gp = gp;
         arial_40 = new Font("Arial", Font.PLAIN, 40);
-        Mushroom mushroom = new Mushroom();
-        mushroomImage = mushroom.image;
     }
 
     public void showMessage(String message){
@@ -28,35 +23,34 @@ public class UI {
     }
 
     public void draw(Graphics2D g2d){
-        if(gameFInished){
-            String text;
-            int textLength;
-            int x,y;
 
-            text = "Game Finished";
-            textLength = g2d.getFontMetrics().getStringBounds(text, g2d).getBounds().width;
+        this.g2d = g2d;
 
-            x = gP.getWidth()/2 - textLength/2;
-            y = gP.getHeight()/2 - gP.tileSize*2;
-            g2d.drawString(text, x, y);
+        g2d.setFont(arial_40);
+        g2d.setColor(Color.WHITE);
 
-        }else {
-            g2d.setFont(arial_40);
-            g2d.setColor(Color.WHITE);
-            g2d.drawImage(mushroomImage, gP.tileSize / 2, gP.tileSize / 2, gP.tileSize, gP.tileSize, null);
-            g2d.drawString("x " + gP.player.hasMushroom, 80, 70);
-
-            //MESSAGE
-            if (messageOn) {
-                g2d.setFont(g2d.getFont().deriveFont(20f));
-                g2d.drawString(message, 80, 150);
-                messageCounter++;
-
-                if (messageCounter > 100) {
-                    messageOn = false;
-                    messageCounter = 0;
-                }
-            }
+        if (gp.gameState == gp.playState){
+            //play state studd
         }
+
+        if (gp.gameState == gp.pauseState){
+            drawPauseScreen();
+        }
+    }
+
+    public void drawPauseScreen(){
+        String text = "PAUSED";
+
+        int x = getXforCenteredText(text);
+        int y = gp.screenHeight/2;
+
+        g2d.drawString(text,x,y);
+    }
+
+    public int getXforCenteredText(String text){
+        int x;
+        int length = (int) g2d.getFontMetrics().getStringBounds(text, g2d).getWidth();
+        x = gp.screenWidth/2 - length/2;
+        return x;
     }
 }
