@@ -74,6 +74,19 @@ public class Player extends Entity{
                 direction = "right";
             }
 
+            if(keyHandler.upPressed && keyHandler.rightPressed){
+                direction = "up-right";
+            }
+            if(keyHandler.upPressed && keyHandler.leftPressed){
+                direction = "up-left";
+            }
+            if(keyHandler.downPressed && keyHandler.rightPressed){
+                direction = "down-right";
+            }
+            if(keyHandler.downPressed && keyHandler.leftPressed){
+                direction = "down-left";
+            }
+
             //check tile collision
             collisionOn = false;
             gp.collisionChecker.checkTile(this);
@@ -99,6 +112,22 @@ public class Player extends Entity{
                         break;
                     case "right":
                         worldX += speed;
+                        break;
+                    case "up-right":
+                        worldY -= speed;
+                        worldX += speed;
+                        break;
+                    case "up-left":
+                        worldY -= speed;
+                        worldX -= speed;
+                        break;
+                    case "down-right":
+                        worldY += speed;
+                        worldX += speed;
+                        break;
+                    case "down-left":
+                        worldY += speed;
+                        worldX -= speed;
                         break;
                 }
             }
@@ -153,7 +182,7 @@ public class Player extends Entity{
                     image = up2;
                 }
                 break;
-            case "left":
+            case "left", "up-left", "down-left":
                 if(spriteNumber == 1){
                     image = left1;
                 }
@@ -161,7 +190,7 @@ public class Player extends Entity{
                     image = left2;
                 }
                 break;
-            case "right":
+            case "right", "up-right", "down-right":
                 if(spriteNumber == 1){
                     image = right1;
                 }
@@ -169,6 +198,7 @@ public class Player extends Entity{
                     image = right2;
                 }
                 break;
+
         }
 
         g2d.drawImage(image, screenX, screenY, (int)(gp.tileSize*2),(int) (gp.tileSize*2), null);
