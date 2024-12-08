@@ -22,7 +22,7 @@ public class AssetSetter {
 
     public void setNPC(){
         gp.npc[0] = new Oscael(gp);
-        gp.npc[0].worldX = 3 * gp.tileSize;
-        gp.npc[0].worldY = 3 * gp.tileSize;
+        gp.npc[0].worldX = 30 * gp.tileSize;
+        gp.npc[0].worldY = 10* gp.tileSize;
     }
 }

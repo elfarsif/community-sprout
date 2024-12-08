@@ -36,21 +36,21 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues(){
-        worldX = gp.tileSize * 10;
-        worldY = gp.tileSize * 15;
-        speed=4;
+        worldX = gp.tileSize * 35;
+        worldY = gp.tileSize * 10;
+        speed=6;
         direction = "down";
     }
 
     public void getPlayerImage() {
         down1 = setup("/player/walking/down1.png");
         down2 = setup("/player/walking/down2.png");
-        up1 = setup("/player/standing/character.png");
-        up2 = setup("/player/standing/character.png");
-        left1 = setup("/player/standing/character.png");
-        left2 = setup("/player/standing/character.png");
-        right1 = setup("/player/standing/character.png");
-        right2 = setup("/player/standing/character.png");
+        up1 = setup("/player/walking/up1.png");
+        up2 = setup("/player/walking/up2.png");
+        left1 = setup("/player/walking/left1.png");
+        left2 = setup("/player/walking/left2.png");
+        right1 = setup("/player/walking/right1.png");
+        right2 = setup("/player/walking/right2.png");
 
     }
 
@@ -119,8 +119,12 @@ public class Player extends Entity{
 
     private void interactNPC(int i) {
         if(i != 999){
-            System.out.println("Interacting with NPC");
+            if(gp.keyHandler.ePressed){
+                gp.gameState = gp.dialogueState;
+                gp.npc[i].speak();
+            }
         }
+        gp.keyHandler.ePressed = false;
     }
 
     public void pickUpObject(int objectIndex){

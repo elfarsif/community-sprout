@@ -23,6 +23,8 @@ public class Entity {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public Boolean collisionOn = false;
     public int actionLookCounter = 0;
+    String[] dialogs = new String[10];
+    int dialogIndex=0;
 
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -125,5 +127,15 @@ public class Entity {
             g2d.drawImage(image, screenX, screenY, gp.tileSize*2, gp.tileSize*2, null);
         }
 
+
+    }
+
+    public void speak(){
+        if(dialogs[dialogIndex] == null){
+            dialogIndex = 0;
+            gp.gameState = gp.playState;
+        }
+        gp.ui.currentDialog = dialogs[dialogIndex];
+        dialogIndex++;
     }
 }

@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int maxWorldRow = 48;
 
     //System
-    KeyHandler keyHandler = new KeyHandler(this);
+    public KeyHandler keyHandler = new KeyHandler(this);
     public Sound sound = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
@@ -45,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable{
     public int gameState;
     public final int playState =1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
 
 
 

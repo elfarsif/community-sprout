@@ -11,6 +11,7 @@ public class UI {
     int messageCounter = 0;
     public boolean gameFInished = false;
     Graphics2D g2d;
+    public String currentDialog;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -29,13 +30,45 @@ public class UI {
         g2d.setFont(arial_40);
         g2d.setColor(Color.WHITE);
 
+        //Play State
         if (gp.gameState == gp.playState){
             //play state studd
         }
 
+        //Pause State
         if (gp.gameState == gp.pauseState){
             drawPauseScreen();
         }
+
+        //Dialog State
+        if (gp.gameState == gp.dialogueState){
+            drawDialogScreen();
+        }
+    }
+
+    private void drawDialogScreen() {
+        //Window
+        int x = gp.tileSize*2;
+        int y = gp.tileSize/2;
+        int width = gp.screenWidth - gp.tileSize*4;
+        int height = gp.tileSize*5;
+
+        drawSubWindow(x,y,width,height);
+        g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 30));
+        x += gp.tileSize;
+        y += gp.tileSize;
+        g2d.drawString(currentDialog,x,y);
+    }
+
+    public void drawSubWindow(int x, int y, int width, int height){
+        Color color = new Color(0,0,0, 200);
+        g2d.setColor(color);
+        g2d.fillRoundRect(x,y,width,height,20,20);
+
+        color= new Color(255,255,255);
+        g2d.setColor(color);
+        g2d.setStroke(new BasicStroke(3));
+        g2d.drawRoundRect(x+3,y+3,width-6,height-6,20,20);
     }
 
     public void drawPauseScreen(){

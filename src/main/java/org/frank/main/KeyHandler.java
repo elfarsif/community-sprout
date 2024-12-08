@@ -9,6 +9,7 @@ public class KeyHandler implements KeyListener {
     public boolean downPressed;
     public boolean leftPressed;
     public boolean rightPressed;
+    public boolean ePressed;
 
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -21,23 +22,37 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         int code = keyEvent.getKeyCode();
-        if (code == KeyEvent.VK_W) {
-            upPressed = true;
-        }
-        if (code == KeyEvent.VK_A) {
-            leftPressed = true;
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = true;
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = true;
-        }
+        //PLAY STATE
+        if(gp.gameState == gp.playState){
+            if (code == KeyEvent.VK_W) {
+                upPressed = true;
+            }
+            if (code == KeyEvent.VK_A) {
+                leftPressed = true;
+            }
+            if (code == KeyEvent.VK_S) {
+                downPressed = true;
+            }
+            if (code == KeyEvent.VK_D) {
+                rightPressed = true;
+            }
+            if(code == KeyEvent.VK_E){
+                ePressed = true;
+            }
 
-        if(code == KeyEvent.VK_P){
-            if(gp.gameState == gp.playState){
-                gp.gameState = gp.pauseState;
-            }else if(gp.gameState == gp.pauseState){
+            if(code == KeyEvent.VK_P){
+                if(gp.gameState == gp.playState){
+                    gp.gameState = gp.pauseState;
+                }else if(gp.gameState == gp.pauseState){
+                    gp.gameState = gp.playState;
+                }
+            }
+        }else if(gp.gameState == gp.dialogueState){
+            if(code == KeyEvent.VK_SPACE){
+                gp.gameState = gp.playState;
+            }
+        }else if(gp.gameState == gp.pauseState){
+            if(code == KeyEvent.VK_P){
                 gp.gameState = gp.playState;
             }
         }
