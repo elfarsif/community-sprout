@@ -44,6 +44,20 @@ public class UI {
         if (gp.gameState == gp.dialogueState){
             drawDialogScreen();
         }
+
+        //TITLE STATE
+        if(gp.gameState == gp.titleState){
+            drawTitleScreen();
+        }
+    }
+
+    private void drawTitleScreen() {
+        g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 60));
+        String text = "Title Screen";
+        int x = getXforCenteredText(text);
+        int y = gp.screenHeight/2;
+        g2d.drawString(text,x,y);
+
     }
 
     private void drawDialogScreen() {

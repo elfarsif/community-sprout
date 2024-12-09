@@ -25,7 +25,7 @@ public class SuperObject {
                 worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
                 worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY){
 
-            g2d.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2d.drawImage(image, screenX, screenY, gamePanel.tileSize*2, gamePanel.tileSize*2, null);
         }
 
     }

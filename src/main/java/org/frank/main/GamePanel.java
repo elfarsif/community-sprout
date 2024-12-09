@@ -46,6 +46,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState =1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int titleState = 4;
+
 
 
 
@@ -90,6 +92,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update(){
+
         if(gameState == playState){
             player.update();
             //update all npc
@@ -109,27 +112,36 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2d = (Graphics2D) g;
 
-        tileManager.draw(g2d);
+        //Title SCREEN
+        if(gameState == titleState){
+            g2d.setColor(Color.WHITE);
+            ui.draw(g2d);
+        }else {
 
-        //paint objects
-        for(int i = 0; i < objects.length; i++){
-            if(objects[i] != null){
-                objects[i].draw(g2d, this);
+            tileManager.draw(g2d);
+
+            //paint objects
+            for(int i = 0; i < objects.length; i++){
+                if(objects[i] != null){
+                    objects[i].draw(g2d, this);
+                }
             }
-        }
 
-        //NPC
-        for(int i = 0; i < npc.length; i++){
-            if(npc[i] != null){
-                npc[i].draw(g2d);
+            //NPC
+            for(int i = 0; i < npc.length; i++){
+                if(npc[i] != null){
+                    npc[i].draw(g2d);
+                }
             }
+
+            //PLAYER
+            player.draw(g2d);
+
+            //UI
+            ui.draw(g2d);
+
+
         }
-
-        //PLAYER
-        player.draw(g2d);
-
-        //UI
-        ui.draw(g2d);
 
 
         g2d.dispose();
@@ -144,6 +156,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void stopMusic(){
         sound.stop();
     }
+
     public void playSoundEffect(int i){
         sound.setFile(i);
         sound.play();

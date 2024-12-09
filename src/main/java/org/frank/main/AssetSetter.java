@@ -1,8 +1,7 @@
 package org.frank.main;
 
 import org.frank.entity.Oscael;
-import org.frank.object.Door;
-import org.frank.object.Mushroom;
+import org.frank.object.PineTree;
 
 public class AssetSetter {
 
@@ -13,8 +12,9 @@ public class AssetSetter {
     }
 
     public void setObject(){
-        gp.objects[0] = new Mushroom();
-        gp.objects[0].worldX = 2 * gp.tileSize;
+        gp.objects[0] = new PineTree();
+        gp.objects[0].collision = true;
+        gp.objects[0].worldX = 27 * gp.tileSize;
         gp.objects[0].worldY = 4 * gp.tileSize;
 
 
