@@ -10,6 +10,7 @@ public class KeyHandler implements KeyListener {
     public boolean leftPressed;
     public boolean rightPressed;
     public boolean ePressed;
+    public boolean tPressed;
 
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -22,6 +23,11 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         int code = keyEvent.getKeyCode();
+
+        //DEBUG TIME
+        if(code == KeyEvent.VK_T){
+            tPressed = !tPressed;
+        }
         //PLAY STATE
         if(gp.gameState == gp.playState){
             if (code == KeyEvent.VK_W) {

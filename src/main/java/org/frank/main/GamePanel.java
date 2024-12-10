@@ -7,8 +7,11 @@ import org.frank.tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel extends JPanel implements Runnable {
 
     //SCREEN SETTINGS
     public final int originalTileSize = 16;
@@ -26,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     //System
     public KeyHandler keyHandler = new KeyHandler(this);
+    public MouseHandler mouseHandler = new MouseHandler(this);
     public Sound sound = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
@@ -48,16 +52,18 @@ public class GamePanel extends JPanel implements Runnable{
     public final int dialogueState = 3;
     public final int titleState = 4;
 
-
-
+    public Graphics2D g2d;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
+        this.addMouseMotionListener(mouseHandler);
+        this.addMouseListener(mouseHandler);
         this.setFocusable(true);
     }
+
 
     public void startGameThread(){
         gameThread = new Thread(this);
@@ -110,7 +116,13 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        Graphics2D g2d = (Graphics2D) g;
+        this.g2d = (Graphics2D) g;
+
+        //DEBUG
+        long drawStart = 0;
+        if(keyHandler.tPressed){
+            drawStart = System.nanoTime();
+        }
 
         //Title SCREEN
         if(gameState == titleState){
@@ -143,6 +155,14 @@ public class GamePanel extends JPanel implements Runnable{
 
         }
 
+        //DEBUG
+        if(keyHandler.tPressed){
+            long drawEnd = System.nanoTime();
+            long drawTime = drawEnd - drawStart;
+            g2d.drawString("Draw Time: " + drawTime, 10, 30);
+            System.out.println("Draw Time: " + drawTime);
+        }
+
 
         g2d.dispose();
     }
@@ -161,4 +181,5 @@ public class GamePanel extends JPanel implements Runnable{
         sound.setFile(i);
         sound.play();
     }
+
 }

@@ -4,6 +4,8 @@ import org.frank.main.GamePanel;
 import org.frank.main.KeyHandler;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
@@ -17,6 +19,7 @@ public class Player extends Entity{
     public Player(GamePanel gp, KeyHandler keyHandler) {
         super(gp);
 
+
         this.keyHandler = keyHandler;
 
         screenX = gp.screenWidth / 2 - gp.tileSize / 2;
@@ -29,11 +32,29 @@ public class Player extends Entity{
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 8*3;
         solidArea.height = 8*3;
-
+        handleClickingOnPlayer(gp);
 
         setDefaultValues();
         getPlayerImage();
     }
+
+    private void handleClickingOnPlayer(GamePanel gp) {
+        gp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+
+                if (mouseX >= screenX && mouseX <= screenX + gp.tileSize * 2 &&
+                        mouseY >= screenY && mouseY <= screenY + gp.tileSize * 2) {
+                    down1 = up1;
+                }
+            }
+
+        });
+
+    }
+
 
     public void setDefaultValues(){
         worldX = gp.tileSize * 35;
@@ -305,4 +326,6 @@ public class Player extends Entity{
         g2d.drawImage(image, screenX, screenY, (int)(gp.tileSize*2),(int) (gp.tileSize*2), null);
 
     }
+
+
 }
