@@ -1,6 +1,8 @@
 package org.frank.main;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class UI {
 
@@ -12,10 +14,22 @@ public class UI {
     public boolean gameFInished = false;
     Graphics2D g2d;
     public String currentDialog;
+    BufferedImage backgroundImage;
+    public int commandNum = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
         arial_40 = new Font("Arial", Font.PLAIN, 40);
+        loadBackgroundImage();
+    }
+
+    private void loadBackgroundImage() {
+        try{
+            backgroundImage = ImageIO.read(getClass().getResource("/title-screen/title-picture.png"));
+        }catch (Exception e){
+            throw new RuntimeException("Error loading image Door:"+e);
+        }
+
     }
 
     public void showMessage(String message){
@@ -52,12 +66,55 @@ public class UI {
     }
 
     private void drawTitleScreen() {
-        g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 60));
-        String text = "Title Screen";
+
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+
+
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 60));
+        String text = "Community Sprout";
         int x = getXforCenteredText(text);
-        int y = gp.screenHeight/2;
+        int y = gp.tileSize*5;
+        //SHADOW
+        g2d.setColor(Color.gray);
+        g2d.drawString(text,x+5,y+5);
+        g2d.setColor(Color.WHITE);
         g2d.drawString(text,x,y);
 
+        //IMAGE
+        x = gp.screenWidth/2 - gp.tileSize;
+        y += gp.tileSize*2;
+        g2d.drawImage(gp.player.down1,x,y,gp.tileSize*2,gp.tileSize*2,null);
+
+        x= gp.screenWidth/2-1024/2;
+        g2d.drawImage(backgroundImage,x,0,1024,1024,null);
+
+        //MENU
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 30));
+        text = "NEW GAME";
+        x = getXforCenteredText(text);
+        y = (int) (gp.screenHeight*0.85);
+        g2d.drawString(text,x,y);
+        if(commandNum == 0){
+            g2d.drawString(">",x-gp.tileSize,y);
+        }
+
+
+        text = "LOAD GAME";
+        x = getXforCenteredText(text);
+        y += gp.tileSize;
+        g2d.drawString(text,x,y);
+        if(commandNum == 1){
+            g2d.drawString(">",x-gp.tileSize,y);
+        }
+
+        text = "QUIT";
+        x = getXforCenteredText(text);
+        y += gp.tileSize;
+        g2d.drawString(text,x,y);
+        if(commandNum == 2){
+            g2d.drawString(">",x-gp.tileSize,y);
+        }
     }
 
     private void drawDialogScreen() {

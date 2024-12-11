@@ -26,7 +26,6 @@ public class GamePanel extends JPanel implements Runnable {
     //WORLD SETTINGS
     public final int maxWorldCol = 64;
     public final int maxWorldRow = 48;
-
     //System
     public KeyHandler keyHandler = new KeyHandler(this);
     public MouseHandler mouseHandler = new MouseHandler(this);
@@ -71,11 +70,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame(){
+        gameState = titleState;
         assetSetter.setObject();
         assetSetter.setNPC();
         playMusic(0);
         stopMusic();
-        gameState = playState;
     }
 
     @Override
