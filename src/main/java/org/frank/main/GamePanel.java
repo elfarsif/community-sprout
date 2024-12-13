@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     public TileManager tileManager = new TileManager(this);
     public UI ui = new UI(this);
     public Thread gameThread;
+    public EventHandler eventHandler = new EventHandler(this);
 
 
     //ENTITIES AND OBJECTS
