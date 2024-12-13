@@ -1,6 +1,7 @@
 package org.frank.object;
 
 import org.frank.main.GamePanel;
+import org.frank.main.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,7 @@ public class SuperObject {
     public Rectangle solidArea = new Rectangle(0,0,48,48);
     public int solidAreaDefaultX=0;
     public int solidAreaDefaultY=0;
+    UtilityTool utilityTool = new UtilityTool();
 
     public SuperObject(){
         setDefaultSolidArea();
@@ -40,7 +42,7 @@ public class SuperObject {
                 worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
                 worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY){
 
-            g2d.drawImage(image, screenX, screenY, gamePanel.tileSize*2, gamePanel.tileSize*2, null);
+            g2d.drawImage(image, screenX, screenY, null);
         }
 
     }

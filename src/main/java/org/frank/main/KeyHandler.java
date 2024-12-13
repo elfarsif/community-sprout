@@ -49,7 +49,7 @@ public class KeyHandler implements KeyListener {
                         break;
                     case 1:
                         gp.gameState = gp.playState;
-                        gp.playMusic(0);
+//                        gp.playMusic(0);
                         break;
                     case 2:
                         System.exit(0);

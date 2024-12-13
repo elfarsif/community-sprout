@@ -12,7 +12,7 @@ public class AssetSetter {
     }
 
     public void setObject(){
-        gp.objects[0] = new PineTree();
+        gp.objects[0] = new PineTree(gp);
         gp.objects[0].collision = true;
         gp.objects[0].worldX = 27 * gp.tileSize;
         gp.objects[0].worldY = 4 * gp.tileSize;

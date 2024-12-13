@@ -1,6 +1,7 @@
 package org.frank.entity;
 
 import org.frank.main.GamePanel;
+import org.frank.main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -81,11 +82,16 @@ public class Entity {
     }
 
     public BufferedImage setup(String path){
+
+        UtilityTool utilityTool = new UtilityTool();
+        BufferedImage image = null;
         try {
-            return ImageIO.read(getClass().getResourceAsStream(path));
+            image = ImageIO.read(getClass().getResourceAsStream(path));
+            image = utilityTool.scaleImage(image, gp.tileSize*2, gp.tileSize*2);
         } catch (Exception e) {
             throw new RuntimeException("Error reading image :"+e);
         }
+        return image;
     }
 
     public void draw(Graphics2D g2d) {

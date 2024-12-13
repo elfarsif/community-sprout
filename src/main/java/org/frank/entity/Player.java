@@ -323,7 +323,7 @@ public class Player extends Entity{
 
         }
 
-        g2d.drawImage(image, screenX, screenY, (int)(gp.tileSize*2),(int) (gp.tileSize*2), null);
+        g2d.drawImage(image, screenX, screenY, null);
 
     }
 
