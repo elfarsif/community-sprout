@@ -1,20 +1,15 @@
 package org.frank.object;
 
+import org.frank.entity.Entity;
 import org.frank.main.GamePanel;
 
 import javax.imageio.ImageIO;
 
-public class PineTree extends SuperObject{
-    GamePanel gp;
+public class PineTree extends Entity {
 
     public PineTree(GamePanel gp){
+        super(gp);
         name = "pine-tree";
-        try{
-            image = ImageIO.read(getClass().getResource("/objects/pine-tree.png"));
-            image= utilityTool.scaleImage(image, gp.tileSize*2, gp.tileSize*2);
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        down1 = setup("/objects/pine-tree.png");
     }
 }

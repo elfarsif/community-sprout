@@ -17,6 +17,12 @@ public class AssetSetter {
         gp.objects[0].worldX = 27 * gp.tileSize;
         gp.objects[0].worldY = 4 * gp.tileSize;
 
+        gp.objects[1] = new PineTree(gp);
+        gp.objects[1].worldX = 29 * gp.tileSize;
+        gp.objects[1].worldY = 6 * gp.tileSize;
+
+
+
 
     }
 

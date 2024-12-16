@@ -2,14 +2,13 @@ package org.frank.main;
 
 import org.frank.entity.Entity;
 import org.frank.entity.Player;
-import org.frank.object.SuperObject;
 import org.frank.tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -40,8 +39,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     //ENTITIES AND OBJECTS
     public Player player = new Player(this, keyHandler);
-    public SuperObject[] objects = new SuperObject[10];
+    public Entity[] objects = new Entity[10];
     public Entity[] npc = new Entity[10];
+    ArrayList<Entity> entities = new ArrayList<Entity>();
 
     int FPS = 60;
 
@@ -132,22 +132,34 @@ public class GamePanel extends JPanel implements Runnable {
 
             tileManager.draw(g2d);
 
-            //paint objects
-            for(int i = 0; i < objects.length; i++){
-                if(objects[i] != null){
-                    objects[i].draw(g2d, this);
-                }
-            }
-
-            //NPC
+            //ADD ENTITIES TO LIST
+            entities.add(player);
             for(int i = 0; i < npc.length; i++){
                 if(npc[i] != null){
-                    npc[i].draw(g2d);
+                    entities.add(npc[i]);
                 }
             }
 
-            //PLAYER
-            player.draw(g2d);
+            for(int i = 0; i < objects.length; i++){
+                if(objects[i] != null){
+                    entities.add(objects[i]);
+                }
+            }
+            //SORT by world Y so lower entities are drawn first so that higher entities dont overlap on top
+            Collections.sort(entities, new Comparator<Entity>() {
+                @Override
+                public int compare(Entity e1, Entity e2) {
+                    int result = Integer.compare(e1.worldY, e2.worldY);
+                    return result;
+                }
+            });
+
+            //DRAW ENTITIES
+            for(Entity e : entities){
+                e.draw(g2d);
+            }
+            //EMPTY LIST
+            entities.clear();
 
             //UI
             ui.draw(g2d);
