@@ -31,6 +31,10 @@ public class Entity {
     public String name;
     public boolean collision = false;
 
+    //CHARACTER STATUS
+    public int maxLife;
+    public int currentLife;
+
     public Entity(GamePanel gp){
         this.gp = gp;
         setDefaultSolidArea();

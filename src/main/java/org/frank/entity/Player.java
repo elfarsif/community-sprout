@@ -61,6 +61,10 @@ public class Player extends Entity{
         worldY = gp.tileSize * 10;
         speed=5;
         direction = "down";
+
+        //PLAYER STATUS
+        maxLife = 3;
+        currentLife = maxLife;
     }
 
     public void getPlayerImage() {

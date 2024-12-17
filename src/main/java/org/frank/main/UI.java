@@ -1,5 +1,8 @@
 package org.frank.main;
 
+import org.frank.entity.Entity;
+import org.frank.object.HealthBar;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,11 +19,17 @@ public class UI {
     public String currentDialog;
     BufferedImage backgroundImage;
     public int commandNum = 0;
+    BufferedImage health1, health2, health3;
 
     public UI(GamePanel gp){
         this.gp = gp;
         arial_40 = new Font("Arial", Font.PLAIN, 40);
         loadBackgroundImage();
+        //CREATE HEALTH OBJECTS
+        Entity healthBar = new HealthBar(gp);
+        health1 = healthBar.down1;
+        health2 = healthBar.down2;
+        health3 = healthBar.down3;
     }
 
     private void loadBackgroundImage() {
@@ -46,7 +55,7 @@ public class UI {
 
         //Play State
         if (gp.gameState == gp.playState){
-            //play state studd
+            drawHealthBar();
         }
 
         //Pause State
@@ -57,11 +66,33 @@ public class UI {
         //Dialog State
         if (gp.gameState == gp.dialogueState){
             drawDialogScreen();
+            drawHealthBar();
         }
 
         //TITLE STATE
         if(gp.gameState == gp.titleState){
             drawTitleScreen();
+        }
+    }
+
+    private void drawHealthBar() {
+        int x = gp.tileSize/2;
+        int y = 0;
+
+        if(gp.player.currentLife == 3){
+            g2d.drawImage(health3,x,y,gp.tileSize,gp.tileSize*4,null);
+        }
+
+        if(gp.player.currentLife == 2){
+            g2d.drawImage(health2,x,y,gp.tileSize,gp.tileSize*4,null);
+        }
+
+        if(gp.player.currentLife == 1){
+            g2d.drawImage(health1,x,y,gp.tileSize,gp.tileSize*4,null);
+        }
+
+        if(gp.player.currentLife <= 0){
+            g2d.drawImage(health1,x,y,gp.tileSize,gp.tileSize*4,null);
         }
     }
 
@@ -84,7 +115,7 @@ public class UI {
         //IMAGE
         x = gp.screenWidth/2 - gp.tileSize;
         y += gp.tileSize*2;
-        g2d.drawImage(gp.player.down1,x,y,gp.tileSize*2,gp.tileSize*2,null);
+        g2d.drawImage(gp.player.down1,x,y,gp.tileSize,gp.tileSize,null);
 
         x= gp.screenWidth/2-1024/2;
         g2d.drawImage(backgroundImage,x,0,1024,1024,null);
@@ -93,7 +124,7 @@ public class UI {
         g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 30));
         text = "NEW GAME";
         x = getXforCenteredText(text);
-        y = (int) (gp.screenHeight*0.85);
+        y = (int) (gp.screenHeight*0.80);
         g2d.drawString(text,x,y);
         if(commandNum == 0){
             g2d.drawString(">",x-gp.tileSize,y);
