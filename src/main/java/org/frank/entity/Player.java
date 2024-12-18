@@ -147,6 +147,10 @@ public class Player extends Entity{
             int npcIndex = gp.collisionChecker.checkEntity(this,gp.npc);
             interactNPC(npcIndex);
 
+            //check monster collision
+            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
+            contactMonster(monsterIndex);
+
             //check event
             gp.eventHandler.checkEvent();
 
@@ -187,6 +191,24 @@ public class Player extends Entity{
 
         }
 
+        if (invincible){
+            invincibleCounter++;
+            //60FPS ie 1 second
+            if (invincibleCounter > 60){
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
+
+    }
+
+    private void contactMonster(int monsterIndex) {
+        if (monsterIndex!=999){
+            if (!invincible){
+                currentLife--;
+                invincible = true;
+            }
+        }
     }
 
     private void updateSpriteAnimationImage() {
@@ -330,7 +352,14 @@ public class Player extends Entity{
 
         }
 
+        if(invincible){
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+        }
+
         g2d.drawImage(image, screenX, screenY, null);
+
+        //prevent UI from being transparent
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
     }
 

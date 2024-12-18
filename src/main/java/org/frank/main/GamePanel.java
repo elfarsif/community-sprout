@@ -14,7 +14,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     //SCREEN SETTINGS
     public final int originalTileSize = 16;
-    final int scale = 4;
+    public final int scale = 4;
 
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 24;
@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyHandler);
     public Entity[] objects = new Entity[10];
     public Entity[] npc = new Entity[10];
+    public Entity[] monsters = new Entity[10];
     ArrayList<Entity> entities = new ArrayList<Entity>();
 
     int FPS = 60;
@@ -71,9 +72,10 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame(){
-        gameState = titleState;
+        gameState = playState;
         assetSetter.setObject();
         assetSetter.setNPC();
+        assetSetter.setMonster();
         playMusic(0);
         stopMusic();
     }
@@ -107,8 +109,14 @@ public class GamePanel extends JPanel implements Runnable {
                     npc[i].update();
                 }
             }
+            //update monsters
+            for(int i = 0; i < monsters.length; i++){
+                if(monsters[i] != null){
+                    monsters[i].update();
+                }
+            }
         }
-        if(gameState == playState){
+        if(gameState == pauseState){
             //TODO
         }
     }
@@ -143,6 +151,12 @@ public class GamePanel extends JPanel implements Runnable {
             for(int i = 0; i < objects.length; i++){
                 if(objects[i] != null){
                     entities.add(objects[i]);
+                }
+            }
+
+            for(int i = 0; i < monsters.length; i++){
+                if(monsters[i] != null){
+                    entities.add(monsters[i]);
                 }
             }
             //SORT by world Y so lower entities are drawn first so that higher entities dont overlap on top

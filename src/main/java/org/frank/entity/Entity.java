@@ -17,6 +17,10 @@ public class Entity {
             ,right1,right2,right3,right4,right5,right6, right7,right8;
     public String direction ="down";
 
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
+    public int type;//0 player, 1 npc, 2 monster
+
     int spriteCounter = 0;
     int spriteNumber =1;
 
@@ -58,7 +62,16 @@ public class Entity {
         collisionOn = false;
         gp.collisionChecker.checkTile(this);
         gp.collisionChecker.checkObject(this,false);
-        gp.collisionChecker.checkPlayer(this);
+        gp.collisionChecker.checkEntity(this,gp.npc);
+        gp.collisionChecker.checkEntity(this,gp.monsters);
+        boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
+
+        if(this.type ==2 && contactPlayer){
+            if (gp.player.invincible == false){
+                gp.player.currentLife --;
+                gp.player.invincible = true;
+            }
+        }
 
         if(!collisionOn){
             switch (direction){
@@ -150,7 +163,7 @@ public class Entity {
                 }
 
             // times 2 because the image is 4 tiles big
-            g2d.drawImage(image, screenX, screenY, gp.tileSize*2, gp.tileSize*2, null);
+            g2d.drawImage(image, screenX, screenY, null);
         }
 
 

@@ -1,6 +1,7 @@
 package org.frank.main;
 
 import org.frank.entity.Oscael;
+import org.frank.monster.GreenSlime;
 import org.frank.object.PineTree;
 
 public class AssetSetter {
@@ -30,5 +31,11 @@ public class AssetSetter {
         gp.npc[0] = new Oscael(gp);
         gp.npc[0].worldX = 30 * gp.tileSize;
         gp.npc[0].worldY = 10* gp.tileSize;
+    }
+
+    public void setMonster(){
+        gp.monsters[0] = new GreenSlime(gp);
+        gp.monsters[0].worldX = 30 * gp.tileSize;
+        gp.monsters[0].worldY = 20 * gp.tileSize;
     }
 }
