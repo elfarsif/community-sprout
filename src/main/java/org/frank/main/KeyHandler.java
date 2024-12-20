@@ -9,7 +9,7 @@ public class KeyHandler implements KeyListener {
     public boolean downPressed;
     public boolean leftPressed;
     public boolean rightPressed;
-    public boolean ePressed;
+    public boolean spacePressed;
     public boolean tPressed;
 
     public KeyHandler(GamePanel gp){
@@ -71,8 +71,8 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_D) {
                 rightPressed = true;
             }
-            if(code == KeyEvent.VK_E){
-                ePressed = true;
+            if(code == KeyEvent.VK_SPACE){
+                spacePressed = true;
             }
 
             if(code == KeyEvent.VK_P){

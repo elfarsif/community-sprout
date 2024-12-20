@@ -8,17 +8,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class Player extends Entity{
+public class Player extends Entity {
     KeyHandler keyHandler;
 
     public final int screenX;
     public final int screenY;
 
-
-
     public Player(GamePanel gp, KeyHandler keyHandler) {
         super(gp);
-
 
         this.keyHandler = keyHandler;
 
@@ -26,16 +23,21 @@ public class Player extends Entity{
         screenY = gp.screenHeight / 2 - gp.tileSize / 2;
 
         solidArea = new Rectangle();
-        solidArea.x = 12*3;
-        solidArea.y = 24*3;
+        solidArea.x = 12 * 3;
+        solidArea.y = 24 * 3;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 8*3;
-        solidArea.height = 8*3;
+        solidArea.width = 8 * 3;
+        solidArea.height = 8 * 3;
+
+        attackArea.width = gp.tileSize;
+        attackArea.height = gp.tileSize;
+
         handleClickingOnPlayer(gp);
 
         setDefaultValues();
         getPlayerImage();
+        getPlayerAttackImage();
     }
 
     private void handleClickingOnPlayer(GamePanel gp) {
@@ -55,11 +57,10 @@ public class Player extends Entity{
 
     }
 
-
-    public void setDefaultValues(){
+    public void setDefaultValues() {
         worldX = gp.tileSize * 35;
         worldY = gp.tileSize * 10;
-        speed=5;
+        speed = 5;
         direction = "down";
 
         //PLAYER STATUS
@@ -102,36 +103,59 @@ public class Player extends Entity{
         right8 = setup("/player/walking/right8.png");
     }
 
-    public void update(){
+    public void getPlayerAttackImage() {
+        attackDown1 = setup("/player/attack/down1.png");
+        attackDown2 = setup("/player/attack/down2.png");
+        attackDown3 = setup("/player/attack/down3.png");
+        attackDown4 = setup("/player/attack/down4.png");
+        attackUp1 = setup("/player/attack/up1.png");
+        attackUp2 = setup("/player/attack/up2.png");
+        attackUp3 = setup("/player/attack/up3.png");
+        attackUp4 = setup("/player/attack/up4.png");
+        attackLeft1 = setup("/player/attack/left1.png");
+        attackLeft2 = setup("/player/attack/left2.png");
+        attackLeft3 = setup("/player/attack/left3.png");
+        attackLeft4 = setup("/player/attack/left4.png");
+        attackRight1 = setup("/player/attack/right1.png");
+        attackRight2 = setup("/player/attack/right2.png");
+        attackRight3 = setup("/player/attack/right3.png");
+        attackRight4 = setup("/player/attack/right4.png");
+    }
+
+    public void update() {
         boolean isMoving = false;
-        if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed){
+        if (attacking) {
+            attacking();
+
+        } else if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed
+                || keyHandler.spacePressed) {
             isMoving = true;
         }
 
-        if(isMoving){
-            if(keyHandler.upPressed){
+        if (isMoving) {
+            if (keyHandler.upPressed) {
                 direction = "up";
             }
-            if(keyHandler.downPressed){
+            if (keyHandler.downPressed) {
                 direction = "down";
             }
-            if(keyHandler.leftPressed){
+            if (keyHandler.leftPressed) {
                 direction = "left";
             }
-            if(keyHandler.rightPressed){
+            if (keyHandler.rightPressed) {
                 direction = "right";
             }
 
-            if(keyHandler.upPressed && keyHandler.rightPressed){
+            if (keyHandler.upPressed && keyHandler.rightPressed) {
                 direction = "up-right";
             }
-            if(keyHandler.upPressed && keyHandler.leftPressed){
+            if (keyHandler.upPressed && keyHandler.leftPressed) {
                 direction = "up-left";
             }
-            if(keyHandler.downPressed && keyHandler.rightPressed){
+            if (keyHandler.downPressed && keyHandler.rightPressed) {
                 direction = "down-right";
             }
-            if(keyHandler.downPressed && keyHandler.leftPressed){
+            if (keyHandler.downPressed && keyHandler.leftPressed) {
                 direction = "down-left";
             }
 
@@ -144,7 +168,7 @@ public class Player extends Entity{
             pickUpObject(objectIndex);
 
             //check npc collisionk
-            int npcIndex = gp.collisionChecker.checkEntity(this,gp.npc);
+            int npcIndex = gp.collisionChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
 
             //check monster collision
@@ -154,8 +178,8 @@ public class Player extends Entity{
             //check event
             gp.eventHandler.checkEvent();
 
-            if(!collisionOn){
-                switch (direction){
+            if (!collisionOn && !keyHandler.spacePressed) {
+                switch (direction) {
                     case "up":
                         worldY -= speed;
                         break;
@@ -185,16 +209,19 @@ public class Player extends Entity{
                         worldX -= speed;
                         break;
                 }
+
             }
+
+            gp.keyHandler.spacePressed = false;
 
             updateSpriteAnimationImage();
 
         }
 
-        if (invincible){
+        if (invincible) {
             invincibleCounter++;
             //60FPS ie 1 second
-            if (invincibleCounter > 60){
+            if (invincibleCounter > 60) {
                 invincible = false;
                 invincibleCounter = 0;
             }
@@ -202,9 +229,80 @@ public class Player extends Entity{
 
     }
 
+    private void attacking() {
+        spriteCounter++;
+        //ATTACKING ANIMATION
+        if (spriteCounter <= 5) {
+            spriteNumber = 1;
+        }
+        if (spriteCounter > 5 && spriteCounter <= 15) {
+            spriteNumber = 2;
+        }
+        if (spriteCounter > 15 && spriteCounter <= 25) {
+            spriteNumber = 3;
+
+            //SAVE CURRENT POSITION
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int solidAreaWidth = solidArea.width;
+            int solidAreaHeight = solidArea.height;
+
+            //ADJUST WORLD POSITION FOR ATTACK AREAK
+            switch (direction) {
+                case "up":
+                    worldY -= attackArea.height;
+                    break;
+                case "down":
+                    worldY += attackArea.height;
+                    break;
+                case "left":
+                    worldX -= attackArea.width;
+                    break;
+                case "right":
+                    worldX += attackArea.width;
+                    break;
+            }
+            // ATTACK AREA BECOMES SOLID AREA
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+
+            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
+            damageMonster(monsterIndex);
+
+            //REVERT TO ORIGINAL POSITION
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.width = solidAreaWidth;
+            solidArea.height = solidAreaHeight;
+
+        }
+        if (spriteCounter > 25 && spriteCounter <= 35) {
+            spriteNumber = 4;
+        }
+        if (spriteCounter > 35) {
+            spriteNumber = 1;
+            spriteCounter = 0;
+            attacking = false;
+        }
+    }
+
+    private void damageMonster(int monsterIndex) {
+        if (monsterIndex != 999) {
+            if (!gp.monsters[monsterIndex].invincible){
+                gp.monsters[monsterIndex].currentLife--;
+                gp.monsters[monsterIndex].invincible = true;
+
+                if(gp.monsters[monsterIndex].currentLife <= 0){
+                    gp.monsters[monsterIndex]=null;
+                }
+            }
+        }
+
+    }
+
     private void contactMonster(int monsterIndex) {
-        if (monsterIndex!=999){
-            if (!invincible){
+        if (monsterIndex != 999) {
+            if (!invincible) {
                 currentLife--;
                 invincible = true;
             }
@@ -216,9 +314,9 @@ public class Player extends Entity{
         spriteCounter++;
         int spriteAnimationRate = 9;
 
-        if(spriteCounter>spriteAnimationRate){
+        if (spriteCounter > spriteAnimationRate) {
             spriteNumber++;
-            if(spriteNumber > 8){
+            if (spriteNumber > 8) {
                 spriteNumber = 1;
             }
             spriteCounter = 0;
@@ -226,133 +324,195 @@ public class Player extends Entity{
     }
 
     private void interactNPC(int i) {
-        if(i != 999){
-            if(gp.keyHandler.ePressed){
+        if (gp.keyHandler.spacePressed) {
+            if (i != 999) {
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
+            } else {
+                attacking = true;
             }
         }
-        gp.keyHandler.ePressed = false;
+        gp.keyHandler.spacePressed = false;
     }
 
-    public void pickUpObject(int objectIndex){
-        if(objectIndex != 999){
+    public void pickUpObject(int objectIndex) {
+        if (objectIndex != 999) {
 
         }
     }
 
-    public void draw(Graphics2D g2d){
+    public void draw(Graphics2D g2d) {
         BufferedImage image = null;
 
-        switch (direction){
+        switch (direction) {
             case "down":
-                if(spriteNumber == 1){
-                    image = down1;
-                }
-                if(spriteNumber == 2){
-                    image = down2;
-                }
-                if(spriteNumber == 3){
-                    image = down3;
-                }
-                if(spriteNumber == 4){
-                    image = down4;
-                }
-                if(spriteNumber == 5){
-                    image = down5;
-                }
-                if(spriteNumber == 6){
-                    image = down6;
-                }
-                if(spriteNumber == 7){
-                    image = down7;
-                }
-                if(spriteNumber == 8){
-                    image = down8;
+                if (attacking) {
+                    if (spriteNumber == 1) {
+                        image = attackDown1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = attackDown2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = attackDown3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = attackDown4;
+                    }
+                } else {
+                    if (spriteNumber == 1) {
+                        image = down1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = down2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = down3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = down4;
+                    }
+                    if (spriteNumber == 5) {
+                        image = down5;
+                    }
+                    if (spriteNumber == 6) {
+                        image = down6;
+                    }
+                    if (spriteNumber == 7) {
+                        image = down7;
+                    }
+                    if (spriteNumber == 8) {
+                        image = down8;
+                    }
                 }
                 break;
             case "up":
-                if(spriteNumber == 1){
-                    image = up1;
-                }
-                if(spriteNumber == 2){
-                    image = up2;
-                }
-                if(spriteNumber == 3){
-                    image = up3;
-                }
-                if(spriteNumber == 4){
-                    image = up4;
-                }
-                if(spriteNumber == 5){
-                    image = up5;
-                }
-                if(spriteNumber == 6){
-                    image = up6;
-                }
-                if(spriteNumber == 7){
-                    image = up7;
-                }
-                if(spriteNumber == 8){
-                    image = up8;
+                if (attacking) {
+                    if (spriteNumber == 1) {
+                        image = attackUp1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = attackUp2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = attackUp3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = attackUp4;
+                    }
+                } else {
+                    if (spriteNumber == 1) {
+                        image = up1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = up2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = up3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = up4;
+                    }
+                    if (spriteNumber == 5) {
+                        image = up5;
+                    }
+                    if (spriteNumber == 6) {
+                        image = up6;
+                    }
+                    if (spriteNumber == 7) {
+                        image = up7;
+                    }
+                    if (spriteNumber == 8) {
+                        image = up8;
+                    }
                 }
                 break;
             case "left", "up-left", "down-left":
-                if(spriteNumber == 1){
-                    image = left1;
-                }
-                if(spriteNumber == 2){
-                    image = left2;
-                }
-                if(spriteNumber == 3){
-                    image = left3;
-                }
-                if(spriteNumber == 4){
-                    image = left4;
-                }
-                if(spriteNumber == 5){
-                    image = left5;
-                }
-                if(spriteNumber == 6) {
-                    image = left6;
-                }
-                if(spriteNumber == 7){
-                    image = left7;
-                }
-                if(spriteNumber == 8){
-                    image = left8;
+                if (attacking) {
+                    if (spriteNumber == 1) {
+                        image = attackLeft1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = attackLeft2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = attackLeft3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = attackLeft4;
+                    }
+                } else {
+                    if (spriteNumber == 1) {
+                        image = left1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = left2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = left3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = left4;
+                    }
+                    if (spriteNumber == 5) {
+                        image = left5;
+                    }
+                    if (spriteNumber == 6) {
+                        image = left6;
+                    }
+                    if (spriteNumber == 7) {
+                        image = left7;
+                    }
+                    if (spriteNumber == 8) {
+                        image = left8;
+                    }
                 }
                 break;
             case "right", "up-right", "down-right":
-                if(spriteNumber == 1){
-                    image = right1;
-                }
-                if(spriteNumber == 2 ){
-                    image = right2;
-                }
-                if(spriteNumber == 3){
-                    image = right3;
-                }
-                if(spriteNumber == 4){
-                    image = right4;
-                }
-                if(spriteNumber == 5){
-                    image = right5;
-                }
-                if(spriteNumber == 6){
-                    image = right6;
-                }
-                if(spriteNumber == 7){
-                    image = right7;
-                }
-                if(spriteNumber == 8){
-                    image = right8;
+                if (attacking) {
+                    if (spriteNumber == 1) {
+                        image = attackRight1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = attackRight2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = attackRight3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = attackRight4;
+                    }
+                } else {
+                    if (spriteNumber == 1) {
+                        image = right1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = right2;
+                    }
+                    if (spriteNumber == 3) {
+                        image = right3;
+                    }
+                    if (spriteNumber == 4) {
+                        image = right4;
+                    }
+                    if (spriteNumber == 5) {
+                        image = right5;
+                    }
+                    if (spriteNumber == 6) {
+                        image = right6;
+                    }
+                    if (spriteNumber == 7) {
+                        image = right7;
+                    }
+                    if (spriteNumber == 8) {
+                        image = right8;
+                    }
                 }
                 break;
 
         }
 
-        if(invincible){
+        if (invincible) {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         }
 
@@ -362,6 +522,5 @@ public class Player extends Entity{
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
     }
-
 
 }
