@@ -2,17 +2,21 @@ package org.frank.entity;
 
 import org.frank.main.GamePanel;
 import org.frank.main.KeyHandler;
+import org.frank.object.Mushroom;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity {
     KeyHandler keyHandler;
 
     public final int screenX;
     public final int screenY;
+    public ArrayList<Entity> inventory = new ArrayList<Entity>();
+    public final int maxInventorySize = 10;
 
     public Player(GamePanel gp, KeyHandler keyHandler) {
         super(gp);
@@ -38,6 +42,7 @@ public class Player extends Entity {
         setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
+        setItems();
     }
 
     private void handleClickingOnPlayer(GamePanel gp) {
@@ -66,6 +71,12 @@ public class Player extends Entity {
         //PLAYER STATUS
         maxLife = 3;
         currentLife = maxLife;
+    }
+
+    public void setItems(){
+        inventory.add(new Mushroom(gp));
+        inventory.add(new Mushroom(gp));
+        inventory.add(new Mushroom(gp));
     }
 
     public void getPlayerImage() {

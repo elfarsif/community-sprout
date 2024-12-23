@@ -11,8 +11,9 @@ public class Sound {
     URL soundUrl[] = new URL[3];
 
     public Sound(){
-        soundUrl[0] = getClass().getResource("/sounds/lofi.wav");
+        soundUrl[0] = getClass().getResource("/sounds/acoustic-lofi.wav");
         soundUrl[1] = getClass().getResource("/sounds/chopping-wood.wav");
+        soundUrl[2] = getClass().getResource("/sounds/inventory-cursor.wav");
     }
 
     public void setFile(int i){

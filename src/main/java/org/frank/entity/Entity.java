@@ -38,6 +38,7 @@ public class Entity {
     public BufferedImage image;
     public String name;
     public boolean collision = false;
+    public String description="";
 
     //CHARACTER STATUS
     public int maxLife;

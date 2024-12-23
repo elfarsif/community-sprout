@@ -74,6 +74,19 @@ public class KeyHandler implements KeyListener {
             if(code == KeyEvent.VK_SPACE){
                 spacePressed = true;
             }
+            if(code == KeyEvent.VK_J){
+                if(gp.ui.slotCol!=0){
+                    gp.ui.slotCol--;
+                    gp.playSoundEffect(2);
+                }
+
+            }
+            if (code == KeyEvent.VK_K){
+                if(gp.ui.slotCol!=8){
+                    gp.ui.slotCol++;
+                    gp.playSoundEffect(2);
+                }
+            }
 
             if(code == KeyEvent.VK_P){
                 if(gp.gameState == gp.playState){

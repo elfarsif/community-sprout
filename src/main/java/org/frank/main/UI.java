@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 public class UI {
 
     GamePanel gp;
+    UtilityTool utilityTool = new UtilityTool();
     Font arial_40;
     public boolean messageOn = false;
     public String message = "";
@@ -18,13 +19,17 @@ public class UI {
     Graphics2D g2d;
     public String currentDialog;
     BufferedImage backgroundImage;
+    BufferedImage inventoryStrip;
     public int commandNum = 0;
     BufferedImage health1, health2, health3;
+    public int slotCol = 0;
+    public int slotRow = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
         arial_40 = new Font("Arial", Font.PLAIN, 40);
         loadBackgroundImage();
+        loadUIImages();
         //CREATE HEALTH OBJECTS
         Entity healthBar = new HealthBar(gp);
         health1 = healthBar.down1;
@@ -39,6 +44,15 @@ public class UI {
             throw new RuntimeException("Error loading image Door:"+e);
         }
 
+    }
+
+    private void loadUIImages(){
+        try{
+            inventoryStrip = ImageIO.read(getClass().getResource("/ui/inventory-strip.png"));
+            inventoryStrip = utilityTool.scaleImage(inventoryStrip, gp.tileSize*13, gp.tileSize*2);
+        }catch (Exception e){
+            throw new RuntimeException("Error loading image Door:"+e);
+        }
     }
 
     public void showMessage(String message){
@@ -56,11 +70,13 @@ public class UI {
         //Play State
         if (gp.gameState == gp.playState){
             drawHealthBar();
+            drawInventory();
         }
 
         //Pause State
         if (gp.gameState == gp.pauseState){
             drawPauseScreen();
+            drawInventory();
         }
 
         //Dialog State
@@ -73,6 +89,39 @@ public class UI {
         if(gp.gameState == gp.titleState){
             drawTitleScreen();
         }
+
+
+    }
+
+    private void drawInventory() {
+
+        int frameX = gp.screenWidth/2-gp.tileSize*6;
+        int frameY = gp.screenHeight-gp.tileSize*2;
+        g2d.drawImage(inventoryStrip,frameX,frameY,null);
+
+        //SLOT
+        final int slotXStart = frameX + gp.tileSize/2;
+        final int slotYStart = frameY + gp.tileSize/2;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
+
+        //DRAW PLAYER INVENTORY
+        for(int i = 0; i < gp.player.inventory.size(); i++){
+            g2d.drawImage(gp.player.inventory.get(i).down1,slotX,slotY,null);
+            slotX += gp.tileSize + gp.tileSize/2-8;
+        }
+
+        //CURSOR
+        int cursorX = slotXStart + slotCol*(gp.tileSize+gp.tileSize/2-8);
+        int cursorY = slotYStart + slotRow*gp.tileSize;
+        int cursorWidth = gp.tileSize;
+        int cursorHeight = gp.tileSize;
+
+        //DRAW CURSOR
+        g2d.setColor(Color.WHITE);
+        g2d.setStroke(new BasicStroke(3));
+        g2d.drawRoundRect(cursorX,cursorY,cursorWidth,cursorHeight,10,10);
+
     }
 
     private void drawHealthBar() {
@@ -180,6 +229,7 @@ public class UI {
         int y = gp.screenHeight/2;
 
         g2d.drawString(text,x,y);
+
     }
 
     public int getXforCenteredText(String text){
