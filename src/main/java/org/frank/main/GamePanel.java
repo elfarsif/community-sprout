@@ -53,6 +53,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int dialogueState = 3;
     public final int titleState = 4;
 
+
+
     public Graphics2D g2d;
 
     public GamePanel(){
@@ -112,7 +114,12 @@ public class GamePanel extends JPanel implements Runnable {
             //update monsters
             for(int i = 0; i < monsters.length; i++){
                 if(monsters[i] != null){
-                    monsters[i].update();
+                    if (monsters[i].alive && !monsters[i].dying){
+                        monsters[i].update();
+                    }
+                    if (!monsters[i].alive){
+                        monsters[i] = null;
+                    }
                 }
             }
         }

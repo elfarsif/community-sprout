@@ -6,6 +6,8 @@ import org.frank.object.HealthBar;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class UI {
 
@@ -13,9 +15,9 @@ public class UI {
     UtilityTool utilityTool = new UtilityTool();
     Font arial_40;
     public boolean messageOn = false;
-    public String message = "";
-    int messageCounter = 0;
-    public boolean gameFInished = false;
+    ArrayList<String> messages = new ArrayList<>();
+    ArrayList<Integer> messageCounter = new ArrayList<>();
+    public boolean gameFinished = false;
     Graphics2D g2d;
     public String currentDialog;
     BufferedImage backgroundImage;
@@ -37,6 +39,11 @@ public class UI {
         health3 = healthBar.down3;
     }
 
+    public void addMessage(String text){
+        messages.add(text);
+        messageCounter.add(0);
+    }
+
     private void loadBackgroundImage() {
         try{
             backgroundImage = ImageIO.read(getClass().getResource("/title-screen/title-picture.png"));
@@ -55,11 +62,6 @@ public class UI {
         }
     }
 
-    public void showMessage(String message){
-        this.message = message;
-        messageOn = true;
-    }
-
     public void draw(Graphics2D g2d){
 
         this.g2d = g2d;
@@ -71,12 +73,12 @@ public class UI {
         if (gp.gameState == gp.playState){
             drawHealthBar();
             drawInventory();
+            drawMessage();
         }
 
         //Pause State
         if (gp.gameState == gp.pauseState){
-            drawPauseScreen();
-            drawInventory();
+            drawPauseMenu();
         }
 
         //Dialog State
@@ -90,6 +92,30 @@ public class UI {
             drawTitleScreen();
         }
 
+
+    }
+
+    private void drawMessage() {
+        int messageX = gp.tileSize;
+        int messageY = gp.tileSize*5;
+
+        g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 22));
+
+        for(int i = 0; i < messages.size(); i++){
+            if(messages.get(i) != null){
+                g2d.setColor(Color.WHITE);
+                g2d.drawString(messages.get(i),messageX,messageY);
+
+                int counter = messageCounter.get(i)+i;
+                messageCounter.set(i,counter);
+                messageY +=50;
+
+                if(counter > 120){
+                    messages.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
+        }
 
     }
 
@@ -222,13 +248,62 @@ public class UI {
         g2d.drawRoundRect(x+3,y+3,width-6,height-6,20,20);
     }
 
-    public void drawPauseScreen(){
-        String text = "PAUSED";
+    public void drawPauseMenu(){
+        //Frame
+        final int frameX = gp.tileSize*2;
+        final int frameY = gp.tileSize*2;
+        final int frameWidth = gp.tileSize*10;
+        final int frameHeight = gp.tileSize*5;
+        drawSubWindow(frameX,frameY,frameWidth,frameHeight);
 
-        int x = getXforCenteredText(text);
-        int y = gp.screenHeight/2;
+        //Text
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 22));
 
-        g2d.drawString(text,x,y);
+        int textX = frameX + gp.tileSize/2;
+        int textY = frameY + gp.tileSize/2;
+        final int lineHeight = gp.tileSize;//font height
+
+        //Names
+        g2d.drawString("Level",textX,textY);
+        textY += lineHeight;
+        g2d.drawString("Attack",textX,textY);
+        textY += lineHeight;
+        g2d.drawString("XP",textX,textY);
+        textY += lineHeight;
+        g2d.drawString("Weapon",textX,textY);
+        textY += lineHeight;
+        g2d.drawString("Defense",textX,textY);
+
+        //VALUES
+        int tailX = frameX + frameWidth - 30;
+        textY = frameY + gp.tileSize/2;
+        String value;
+
+        value = String.valueOf(gp.player.level);
+        textX = getXforAlignToRightText(value,tailX);
+        g2d.drawString(value,textX,textY);
+        textY += lineHeight;
+
+        value = String.valueOf(gp.player.attack);
+        textX = getXforAlignToRightText(value,tailX);
+        g2d.drawString(value,textX,textY);
+        textY += lineHeight;
+
+        value = String.valueOf(gp.player.exp);
+        textX = getXforAlignToRightText(value,tailX);
+        g2d.drawString(value,textX,textY);
+        textY += lineHeight;
+
+        value = gp.player.currentWeapon.name;
+        textX = getXforAlignToRightText(value,tailX);
+        g2d.drawString(value,textX,textY);
+        textY += lineHeight;
+
+        value = String.valueOf(gp.player.defense);
+        textX = getXforAlignToRightText(value,tailX);
+        g2d.drawString(value,textX,textY);
+        textY += lineHeight;
 
     }
 
@@ -236,6 +311,12 @@ public class UI {
         int x;
         int length = (int) g2d.getFontMetrics().getStringBounds(text, g2d).getWidth();
         x = gp.screenWidth/2 - length/2;
+        return x;
+    }
+
+    public int getXforAlignToRightText(String text, int tailX){
+        int length = (int) g2d.getFontMetrics().getStringBounds(text, g2d).getWidth();
+        int x = tailX - length;
         return x;
     }
 }

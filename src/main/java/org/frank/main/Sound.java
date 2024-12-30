@@ -8,12 +8,14 @@ import java.net.URL;
 public class Sound {
 
     Clip clip;
-    URL soundUrl[] = new URL[3];
+    URL soundUrl[] = new URL[10];
 
     public Sound(){
         soundUrl[0] = getClass().getResource("/sounds/acoustic-lofi.wav");
         soundUrl[1] = getClass().getResource("/sounds/chopping-wood.wav");
         soundUrl[2] = getClass().getResource("/sounds/inventory-cursor.wav");
+        soundUrl[3] = getClass().getResource("/sounds/sword-sound.wav");
+        soundUrl[4] = getClass().getResource("/sounds/21_orc_damage_1.wav");
     }
 
     public void setFile(int i){

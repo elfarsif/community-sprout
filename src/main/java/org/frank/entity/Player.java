@@ -3,6 +3,8 @@ package org.frank.entity;
 import org.frank.main.GamePanel;
 import org.frank.main.KeyHandler;
 import org.frank.object.Mushroom;
+import org.frank.object.Shield;
+import org.frank.object.Sword;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -71,6 +73,26 @@ public class Player extends Entity {
         //PLAYER STATUS
         maxLife = 3;
         currentLife = maxLife;
+        level = 1;
+        strength = 1;
+        exp = 0;
+        nextLevelExp = 2;
+        coin = 0;
+        currentWeapon = new Sword(gp);
+        currentShield = new Shield(gp);
+        attack = getAttackValue();
+        defense = getDefenseValue();
+
+    }
+
+    private int getDefenseValue() {
+        defense = currentShield.defenseValue;
+        return defense;
+    }
+
+    private int getAttackValue() {
+        attack = strength*currentWeapon.attackValue;
+        return attack;
     }
 
     public void setItems(){
@@ -300,21 +322,55 @@ public class Player extends Entity {
     private void damageMonster(int monsterIndex) {
         if (monsterIndex != 999) {
             if (!gp.monsters[monsterIndex].invincible){
-                gp.monsters[monsterIndex].currentLife--;
+
+                //CALCULATE DAMAGE TO MONSTER
+                int damage = attack - gp.monsters[monsterIndex].defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+                gp.monsters[monsterIndex].currentLife -= damage;
+                gp.ui.addMessage( damage + " damage!");
+
+                //MONSTER REACTION
                 gp.monsters[monsterIndex].invincible = true;
+                gp.monsters[monsterIndex].damageReaction();
 
                 if(gp.monsters[monsterIndex].currentLife <= 0){
-                    gp.monsters[monsterIndex]=null;
+                    gp.monsters[monsterIndex].dying = true;
+                    gp.ui.addMessage("+ "+gp.monsters[monsterIndex].exp+" exp");
+                    exp+=gp.monsters[monsterIndex].exp;
+                    checkLevelUp();
                 }
             }
         }
 
     }
 
+    private void checkLevelUp() {
+        if (exp>=nextLevelExp){
+            gp.ui.addMessage("LEVEL UP!");
+            //change to new player values
+            level++;
+            nextLevelExp *=2;
+            strength++;
+            exp = 0;
+
+            //Display dialogue
+            gp.gameState = gp.dialogueState;
+            gp.ui.currentDialog = "Congratulations! You are now level "+level;
+
+        }
+    }
+
     private void contactMonster(int monsterIndex) {
         if (monsterIndex != 999) {
             if (!invincible) {
-                currentLife--;
+                //CALCULATE MONSTER DAMAGE TO PLAYER
+                int damage = gp.monsters[monsterIndex].attack - defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+                currentLife -= damage;
                 invincible = true;
             }
         }
@@ -340,6 +396,7 @@ public class Player extends Entity {
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
             } else {
+                gp.playSoundEffect(3);
                 attacking = true;
             }
         }

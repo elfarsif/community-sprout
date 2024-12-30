@@ -17,6 +17,9 @@ public class GreenSlime extends Entity {
         this.maxLife = 3;
         type = 2;
         this.currentLife = this.maxLife;
+        attack = 2;
+        defense = 0;
+        exp = 1;
 
         this.solidArea.x =0;
         this.solidArea.y =0;
@@ -78,5 +81,15 @@ public class GreenSlime extends Entity {
             actionLookCounter = 0;
         }
 
+    }
+
+    @Override
+    public void damageReaction(){
+       moveAwayFromPlayer();
+    }
+
+    private void moveAwayFromPlayer(){
+        actionLookCounter = 0;
+        direction = gp.player.direction;
     }
 }
