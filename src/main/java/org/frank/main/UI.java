@@ -106,13 +106,13 @@ public class UI {
                 g2d.setColor(Color.WHITE);
                 g2d.drawString(messages.get(i),messageX,messageY);
 
-                int counter = messageCounter.get(i)+i;
+                int counter = messageCounter.get(i)+1;
                 messageCounter.set(i,counter);
                 messageY +=50;
 
                 if(counter > 120){
-                    messages.remove(i);
-                    messageCounter.remove(i);
+                    messages.set(i,null);
+                    messageCounter.set(i,0);
                 }
             }
         }
