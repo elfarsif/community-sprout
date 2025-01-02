@@ -148,6 +148,14 @@ public class UI {
         g2d.setStroke(new BasicStroke(3));
         g2d.drawRoundRect(cursorX,cursorY,cursorWidth,cursorHeight,10,10);
 
+        int itemIndex = getItemIndexOnSlot();
+        if (itemIndex < gp.player.inventory.size()){
+            g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 22));
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(gp.player.inventory.get(itemIndex).name,cursorX,cursorY+gp.tileSize+20);
+        }
+
+
     }
 
     private void drawHealthBar() {
@@ -307,6 +315,11 @@ public class UI {
 
     }
 
+    public int getItemIndexOnSlot(){
+        int index = slotCol;
+        return index;
+    }
+
     public int getXforCenteredText(String text){
         int x;
         int length = (int) g2d.getFontMetrics().getStringBounds(text, g2d).getWidth();
@@ -319,4 +332,5 @@ public class UI {
         int x = tailX - length;
         return x;
     }
+
 }

@@ -4,6 +4,7 @@ import org.frank.entity.Oscael;
 import org.frank.monster.GreenSlime;
 import org.frank.object.PineTree;
 import org.frank.object.Sword;
+import org.frank.object.SwordCopper;
 
 public class AssetSetter {
 
@@ -23,7 +24,7 @@ public class AssetSetter {
         gp.objects[1].worldX = 29 * gp.tileSize;
         gp.objects[1].worldY = 6 * gp.tileSize;
 
-        gp.objects[2] = new Sword(gp);
+        gp.objects[2] = new SwordCopper(gp);
         gp.objects[2].worldX = 30 * gp.tileSize;
         gp.objects[2].worldY = 12 * gp.tileSize;
 

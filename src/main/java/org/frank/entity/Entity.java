@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  * Handles common attributes and behaviors such as movement, collision, drawing on the screen, and interactions with other entities.
  */
 
-public class Entity {
+public abstract class Entity {
     public GamePanel gp;
     public BufferedImage down1, down2, down3, down4, down5, down6, down7, down8,
             up1, up2, up3, up4, up5, up6, up7, up8, left1, left2, left3, left4, left5, left6, left7, left8, right1, right2, right3, right4, right5, right6, right7, right8;
@@ -46,7 +46,6 @@ public class Entity {
     int hpBarCounter = 0;
 
     //CHARACTER ATTRIBUTES
-    public int type;//0 player, 1 npc, 2 monster
     public String name;
     public int speed;
     public int maxLife;
@@ -64,6 +63,15 @@ public class Entity {
     //ITEM ATTRIBUTES
     public int attackValue;
     public int defenseValue;
+
+    //TYPE
+    public int type;//0 player, 1 npc, 2 monster
+    public final int type_monster = 2;
+    public final int type_sword=3;
+    public final int type_sword_copper=4;
+    public final int type_shield=5;
+    public final int type_consumable=6;
+
 
 
     public Entity(GamePanel gp) {
@@ -101,7 +109,7 @@ public class Entity {
         gp.collisionChecker.checkEntity(this, gp.monsters);
         boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
 
-        if (this.type == 2 && contactPlayer) {
+        if (this.type == type_monster && contactPlayer) {
             if (!gp.player.invincible) {
                 int damage = attack - gp.player.defense;
                 if(damage < 0){
@@ -284,6 +292,9 @@ public class Entity {
     private void changeAlphaForDyingAnimationa(Graphics2D g2d,float alpha){
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
+
+    public void applyConsumable(Entity entity){}
+
 
     public void speak() {
         if (dialogs[dialogIndex] == null) {

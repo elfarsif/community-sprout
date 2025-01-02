@@ -7,6 +7,7 @@ public class Shield extends Entity {
     public Shield(GamePanel gp) {
         super(gp);
         name = "normal shield";
+        type = type_shield;
         defenseValue = 0;
     }
 }

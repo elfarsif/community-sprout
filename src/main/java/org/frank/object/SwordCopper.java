@@ -7,28 +7,15 @@ import org.frank.main.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-public class Mushroom extends Entity {
-    GamePanel gp;
-    int healthValue = 1;
-
-    public Mushroom(GamePanel gp){
+public class SwordCopper extends Entity {
+    public SwordCopper(GamePanel gp) {
         super(gp);
-        this.gp = gp;
-
-        name = "mushroom";
-        type = type_consumable;
-        down1 = setup("/objects/mushroom.png");
-        description = "Give +10 health and +5 energy";
-    }
-
-    @Override
-    public void applyConsumable(Entity entity){
-        gp.gameState = gp.dialogueState;
-        gp.ui.currentDialog = "You ate the mushroom. You feel better."+healthValue+" health";
-        entity.currentLife += healthValue;
-        if (gp.player.currentLife > gp.player.maxLife){
-            gp.player.currentLife = gp.player.maxLife;
-        }
+        name = "copper sword";
+        type = type_sword_copper;
+        down1 = setup("/tools/sword_copper.png");
+        attackValue = 2;
+        attackArea.width = gp.tileSize;
+        attackArea.height = gp.tileSize;
     }
 
     @Override

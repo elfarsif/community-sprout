@@ -11,6 +11,7 @@ public class Sword extends Entity {
     public Sword(GamePanel gp) {
         super(gp);
         name = "normal sword";
+        type = type_sword;
         down1 = setup("/tools/sword.png");
         attackValue = 1;
         attackArea.width = gp.tileSize/2;

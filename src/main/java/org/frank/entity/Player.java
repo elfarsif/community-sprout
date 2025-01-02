@@ -91,12 +91,13 @@ public class Player extends Entity {
     }
 
     private int getAttackValue() {
+        attackArea = currentWeapon.attackArea;
         attack = strength*currentWeapon.attackValue;
         return attack;
     }
 
     public void setItems(){
-        inventory.add(new Mushroom(gp));
+        inventory.add(new Sword(gp));
         inventory.add(new Mushroom(gp));
         inventory.add(new Mushroom(gp));
     }
@@ -137,22 +138,44 @@ public class Player extends Entity {
     }
 
     public void getPlayerAttackImage() {
-        attackDown1 = setup("/player/attack/down1.png");
-        attackDown2 = setup("/player/attack/down2.png");
-        attackDown3 = setup("/player/attack/down3.png");
-        attackDown4 = setup("/player/attack/down4.png");
-        attackUp1 = setup("/player/attack/up1.png");
-        attackUp2 = setup("/player/attack/up2.png");
-        attackUp3 = setup("/player/attack/up3.png");
-        attackUp4 = setup("/player/attack/up4.png");
-        attackLeft1 = setup("/player/attack/left1.png");
-        attackLeft2 = setup("/player/attack/left2.png");
-        attackLeft3 = setup("/player/attack/left3.png");
-        attackLeft4 = setup("/player/attack/left4.png");
-        attackRight1 = setup("/player/attack/right1.png");
-        attackRight2 = setup("/player/attack/right2.png");
-        attackRight3 = setup("/player/attack/right3.png");
-        attackRight4 = setup("/player/attack/right4.png");
+        if (currentWeapon.type == type_sword) {
+            attackDown1 = setup("/player/attack/down1.png");
+            attackDown2 = setup("/player/attack/down2.png");
+            attackDown3 = setup("/player/attack/down3.png");
+            attackDown4 = setup("/player/attack/down4.png");
+            attackUp1 = setup("/player/attack/up1.png");
+            attackUp2 = setup("/player/attack/up2.png");
+            attackUp3 = setup("/player/attack/up3.png");
+            attackUp4 = setup("/player/attack/up4.png");
+            attackLeft1 = setup("/player/attack/left1.png");
+            attackLeft2 = setup("/player/attack/left2.png");
+            attackLeft3 = setup("/player/attack/left3.png");
+            attackLeft4 = setup("/player/attack/left4.png");
+            attackRight1 = setup("/player/attack/right1.png");
+            attackRight2 = setup("/player/attack/right2.png");
+            attackRight3 = setup("/player/attack/right3.png");
+            attackRight4 = setup("/player/attack/right4.png");
+        }
+
+        if (currentWeapon.type == type_sword_copper){
+            attackDown1 = setup("/player/attack/copper_sword/down1.png");
+            attackDown2 = setup("/player/attack/copper_sword/down2.png");
+            attackDown3 = setup("/player/attack/copper_sword/down3.png");
+            attackDown4 = setup("/player/attack/copper_sword/down4.png");
+            attackUp1 = setup("/player/attack/copper_sword/up1.png");
+            attackUp2 = setup("/player/attack/copper_sword/up2.png");
+            attackUp3 = setup("/player/attack/copper_sword/up3.png");
+            attackUp4 = setup("/player/attack/copper_sword/up4.png");
+            attackLeft1 = setup("/player/attack/copper_sword/left1.png");
+            attackLeft2 = setup("/player/attack/copper_sword/left2.png");
+            attackLeft3 = setup("/player/attack/copper_sword/left3.png");
+            attackLeft4 = setup("/player/attack/copper_sword/left4.png");
+            attackRight1 = setup("/player/attack/copper_sword/right1.png");
+            attackRight2 = setup("/player/attack/copper_sword/right2.png");
+            attackRight3 = setup("/player/attack/copper_sword/right3.png");
+            attackRight4 = setup("/player/attack/copper_sword/right4.png");
+        }
+
     }
 
     public void update() {
@@ -405,7 +428,38 @@ public class Player extends Entity {
 
     public void pickUpObject(int objectIndex) {
         if (objectIndex != 999) {
+            String text;
+            if (inventory.size() != maxInventorySize) {
+                inventory.add(gp.objects[objectIndex]);
+                text = "You picked up " + gp.objects[objectIndex].name;
+            }else {
+                text = "inventory is full";
+            }
+            gp.ui.addMessage(text);
+            gp.objects[objectIndex] = null;
+        }
+    }
 
+    public void selectItem(){
+        int itemIndex = gp.ui.getItemIndexOnSlot();
+        if (itemIndex < inventory.size()){
+            Entity selectedItem = inventory.get(itemIndex);
+
+            if (selectedItem.type == type_sword || selectedItem.type == type_sword_copper){
+                currentWeapon = selectedItem;
+                attack = getAttackValue();
+                getPlayerAttackImage();
+            }
+
+            if (selectedItem.type == type_shield){
+                currentShield = selectedItem;
+                defense = getDefenseValue();
+            }
+
+            if (selectedItem.type == type_consumable){
+                /*selectedItem.applyConsumable(this);
+                inventory.remove(itemIndex);*/
+            }
         }
     }
 

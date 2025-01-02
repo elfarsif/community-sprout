@@ -96,6 +96,7 @@ public class KeyHandler implements KeyListener {
             if(gp.ui.slotCol!=0){
                 gp.ui.slotCol--;
                 gp.playSoundEffect(2);
+                gp.player.selectItem();
             }
 
         }
@@ -103,9 +104,12 @@ public class KeyHandler implements KeyListener {
             if(gp.ui.slotCol!=8){
                 gp.ui.slotCol++;
                 gp.playSoundEffect(2);
+                gp.player.selectItem();
             }
         }
-
+        if(code == KeyEvent.VK_ENTER){
+            gp.player.selectItem();
+        }
         if(code == KeyEvent.VK_P){
             if(gp.gameState == gp.playState){
                 gp.gameState = gp.pauseState;
