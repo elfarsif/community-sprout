@@ -50,6 +50,8 @@ public abstract class Entity {
     public int speed;
     public int maxLife;
     public int currentLife;
+    public int maxMana;
+    public int currentMana;
     public int strength;
     public int level;
     public int attack;
@@ -59,10 +61,12 @@ public abstract class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Projectile projectile;
 
     //ITEM ATTRIBUTES
     public int attackValue;
     public int defenseValue;
+    public int projectileUseCost;
 
     //TYPE
     public int type;//0 player, 1 npc, 2 monster
@@ -282,7 +286,6 @@ public abstract class Entity {
             changeAlphaForDyingAnimationa(g2d,0f);
         }
         if (dyingCounter>dyingFrames*7){
-            dying = false;
             alive = false;
         }
 

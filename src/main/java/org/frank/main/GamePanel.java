@@ -43,6 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity[] npc = new Entity[10];
     public Entity[] monsters = new Entity[10];
     ArrayList<Entity> entities = new ArrayList<Entity>();
+    public ArrayList<Entity> projectiles = new ArrayList<Entity>();
 
     int FPS = 60;
 
@@ -122,6 +123,17 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                 }
             }
+            //update projectiles
+            for(int i = 0; i < projectiles.size(); i++){
+                if(projectiles.get(i) != null){
+                    if (projectiles.get(i).alive){
+                        projectiles.get(i).update();
+                    }
+                    if (!projectiles.get(i).alive){
+                        projectiles.remove(i);
+                    }
+                }
+            }
         }
         if(gameState == pauseState){
             //TODO
@@ -149,21 +161,28 @@ public class GamePanel extends JPanel implements Runnable {
 
             //ADD ENTITIES TO LIST
             entities.add(player);
+            //paint npc
             for(int i = 0; i < npc.length; i++){
                 if(npc[i] != null){
                     entities.add(npc[i]);
                 }
             }
-
+            //paint objects
             for(int i = 0; i < objects.length; i++){
                 if(objects[i] != null){
                     entities.add(objects[i]);
                 }
             }
-
+            //paint monsters
             for(int i = 0; i < monsters.length; i++){
                 if(monsters[i] != null){
                     entities.add(monsters[i]);
+                }
+            }
+            //paint projectiles
+            for(int i = 0; i < projectiles.size(); i++){
+                if(projectiles.get(i) != null){
+                    entities.add(projectiles.get(i));
                 }
             }
             //SORT by world Y so lower entities are drawn first so that higher entities dont overlap on top

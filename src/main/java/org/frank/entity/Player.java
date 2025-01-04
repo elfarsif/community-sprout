@@ -2,6 +2,7 @@ package org.frank.entity;
 
 import org.frank.main.GamePanel;
 import org.frank.main.KeyHandler;
+import org.frank.object.Fireball;
 import org.frank.object.Mushroom;
 import org.frank.object.Shield;
 import org.frank.object.Sword;
@@ -80,6 +81,8 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new Sword(gp);
         currentShield = new Shield(gp);
+        projectile = new Fireball(gp);
+
         attack = getAttackValue();
         defense = getDefenseValue();
 
@@ -274,6 +277,13 @@ public class Player extends Entity {
 
         }
 
+        if (gp.keyHandler.shootKeyPressed && projectile.alive == false){
+            //SET PROJECTILE POSITION
+            projectile.set(worldX, worldY, direction, true, this);
+
+            gp.projectiles.add(projectile);
+        }
+
         if (invincible) {
             invincibleCounter++;
             //60FPS ie 1 second
@@ -323,7 +333,7 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
 
             int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
-            damageMonster(monsterIndex);
+            damageMonster(monsterIndex,attack);
 
             //REVERT TO ORIGINAL POSITION
             worldX = currentWorldX;
@@ -342,7 +352,7 @@ public class Player extends Entity {
         }
     }
 
-    private void damageMonster(int monsterIndex) {
+    public void damageMonster(int monsterIndex, int attack) {
         if (monsterIndex != 999) {
             if (!gp.monsters[monsterIndex].invincible){
 
@@ -387,7 +397,7 @@ public class Player extends Entity {
 
     private void contactMonster(int monsterIndex) {
         if (monsterIndex != 999) {
-            if (!invincible) {
+            if (!invincible && gp.monsters[monsterIndex].dying == false) {
                 //CALCULATE MONSTER DAMAGE TO PLAYER
                 int damage = gp.monsters[monsterIndex].attack - defense;
                 if(damage < 0){

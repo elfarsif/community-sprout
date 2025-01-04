@@ -11,6 +11,7 @@ public class KeyHandler implements KeyListener {
     public boolean rightPressed;
     public boolean spacePressed;
     public boolean tPressed;
+    public boolean shootKeyPressed;
 
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -107,6 +108,9 @@ public class KeyHandler implements KeyListener {
                 gp.player.selectItem();
             }
         }
+        if (code == KeyEvent.VK_F){
+            shootKeyPressed = true;
+        }
         if(code == KeyEvent.VK_ENTER){
             gp.player.selectItem();
         }
@@ -143,6 +147,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_D) {
             rightPressed = false;
+        }
+        if (code == KeyEvent.VK_F) {
+            shootKeyPressed = false;
         }
 
     }
