@@ -437,7 +437,9 @@ public class Player extends Entity {
     }
 
     public void pickUpObject(int objectIndex) {
+
         if (objectIndex != 999) {
+
             String text;
             if (inventory.size() != maxInventorySize) {
                 inventory.add(gp.objects[objectIndex]);

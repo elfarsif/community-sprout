@@ -64,6 +64,7 @@ public abstract class Entity {
     public Projectile projectile;
 
     //ITEM ATTRIBUTES
+    public int value;
     public int attackValue;
     public int defenseValue;
     public int projectileUseCost;
@@ -114,14 +115,7 @@ public abstract class Entity {
         boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
 
         if (this.type == type_monster && contactPlayer) {
-            if (!gp.player.invincible) {
-                int damage = attack - gp.player.defense;
-                if(damage < 0){
-                    damage = 0;
-                }
-                gp.player.currentLife -= damage;
-                gp.player.invincible = true;
-            }
+           damagePlayer(attack);
         }
 
         if (!collisionOn) {
@@ -158,6 +152,17 @@ public abstract class Entity {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+    }
+
+    public void damagePlayer(int attack){
+        if (!gp.player.invincible) {
+            int damage = attack - gp.player.defense;
+            if(damage < 0){
+                damage = 0;
+            }
+            gp.player.currentLife -= damage;
+            gp.player.invincible = true;
         }
     }
 
@@ -298,6 +303,19 @@ public abstract class Entity {
 
     public void applyConsumable(Entity entity){}
 
+    public void checkDrop(){
+
+    }
+    public void dropItem(Entity droppedItem){
+        for (int i = 0 ; i<gp.objects.length;i++){
+            if (gp.objects[i] == null){
+                gp.objects[i] = droppedItem;
+                gp.objects[i].worldX = worldX;
+                gp.objects[i].worldY = worldY;
+                break;
+            }
+        }
+    }
 
     public void speak() {
         if (dialogs[dialogIndex] == null) {
@@ -307,4 +325,6 @@ public abstract class Entity {
         gp.ui.currentDialog = dialogs[dialogIndex];
         dialogIndex++;
     }
+
+
 }

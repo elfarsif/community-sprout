@@ -3,6 +3,8 @@ package org.frank.monster;
 import org.frank.entity.Entity;
 import org.frank.main.GamePanel;
 import org.frank.main.UtilityTool;
+import org.frank.object.Banana;
+import org.frank.object.Mushroom;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -91,5 +93,17 @@ public class GreenSlime extends Entity {
     private void moveAwayFromPlayer(){
         actionLookCounter = 0;
         direction = gp.player.direction;
+    }
+
+    @Override
+    public void checkDrop(){
+        int i = new Random().nextInt(100)+1;
+
+        if (i<50){
+            dropItem(new Banana(gp));
+        }else {
+            dropItem(new Mushroom(gp));
+        }
+
     }
 }

@@ -15,10 +15,10 @@ public class Fireball extends Projectile {
         super(gp);
         this.gp = gp;
         name = "fireball";
-        speed = 4;
+        speed = 9;
         maxLife = 80;
         currentLife = maxLife;
-        attack = 2;
+        attack = 1;
         projectileUseCost = 1;
         alive = false;
         getImage();
