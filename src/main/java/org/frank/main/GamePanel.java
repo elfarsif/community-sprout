@@ -3,6 +3,7 @@ package org.frank.main;
 import org.frank.entity.Entity;
 import org.frank.entity.Player;
 import org.frank.tile.TileManager;
+import org.frank.tile_interactive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity[] monsters = new Entity[10];
     ArrayList<Entity> entities = new ArrayList<Entity>();
     public ArrayList<Entity> projectiles = new ArrayList<Entity>();
+    public InteractiveTile[] iTiles = new InteractiveTile[10];
 
     int FPS = 60;
 
@@ -79,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setObject();
         assetSetter.setNPC();
         assetSetter.setMonster();
+        assetSetter.setInteractiveTiles();
         playMusic(0);
         stopMusic();
     }
@@ -135,6 +138,12 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                 }
             }
+            //update interactive tiles
+            for (int i = 0; i < iTiles.length; i++){
+                if(iTiles[i] != null){
+                    iTiles[i].update();
+                }
+            }
         }
         if(gameState == pauseState){
             //TODO
@@ -160,8 +169,20 @@ public class GamePanel extends JPanel implements Runnable {
 
             tileManager.draw(g2d);
 
+            for (int i = 0 ; i < iTiles.length; i++){
+                if(iTiles[i] != null){
+                    iTiles[i].draw(g2d);
+                }
+            }
+
             //ADD ENTITIES TO LIST
             entities.add(player);
+            //ADD INTERACTIVE TILES
+            for (int i = 0; i < iTiles.length; i++){
+                if(iTiles[i] != null){
+                    entities.add(iTiles[i]);
+                }
+            }
             //paint npc
             for(int i = 0; i < npc.length; i++){
                 if(npc[i] != null){
