@@ -7,6 +7,7 @@ import org.frank.tile_interactive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,6 +23,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 13;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
+
+    //FULLSCREEN
+    int screenWidth2= screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2d;
 
     //WORLD SETTINGS
     public final int maxWorldCol = 64;
@@ -57,9 +64,6 @@ public class GamePanel extends JPanel implements Runnable {
     public final int titleState = 4;
 
 
-
-    public Graphics2D g2d;
-
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -77,13 +81,18 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame(){
-        gameState = playState;
+        gameState = titleState;
         assetSetter.setObject();
         assetSetter.setNPC();
         assetSetter.setMonster();
         assetSetter.setInteractiveTiles();
         playMusic(0);
         stopMusic();
+
+        tempScreen = new BufferedImage(screenWidth,screenHeight,BufferedImage.TYPE_INT_ARGB);
+        g2d = (Graphics2D) tempScreen.getGraphics();
+
+        setFullScreen();
     }
 
     @Override
@@ -99,7 +108,8 @@ public class GamePanel extends JPanel implements Runnable {
             lastTime = currentTime;
             if(delta >= 1){
                 update();
-                repaint();
+                drawToTempScreen();
+                drawToScreen();
                 delta--;
             }
         }
@@ -150,11 +160,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        this.g2d = (Graphics2D) g;
-
+    public void drawToTempScreen(){
         //DEBUG
         long drawStart = 0;
         if(keyHandler.tPressed){
@@ -237,10 +243,26 @@ public class GamePanel extends JPanel implements Runnable {
             System.out.println("Draw Time: " + drawTime);
         }
 
-
-        g2d.dispose();
     }
 
+    public void setFullScreen(){
+        //Get local screen size device
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        //GET FULL SCREEN WIDTH AND HEIGHT
+        screenWidth2 = Main.window.getWidth();
+        screenHeight2 = Main.window.getHeight();
+
+
+    }
+
+    public void drawToScreen(){
+        Graphics g = this.getGraphics();
+        g.drawImage(tempScreen,0,0,screenWidth2,screenHeight2,null);
+        g.dispose();
+    }
     public void playMusic(int i){
         sound.setFile(i);
         sound.play();
