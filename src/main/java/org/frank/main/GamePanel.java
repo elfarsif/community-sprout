@@ -19,8 +19,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int scale = 4;
 
     public final int tileSize = originalTileSize * scale;
-    public final int maxScreenCol = 24;
-    public final int maxScreenRow = 13;
+    public final int maxScreenCol = 30;
+    public final int maxScreenRow = 16;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
@@ -29,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
     Graphics2D g2d;
+    public boolean fullScreenOn = false;
 
     //WORLD SETTINGS
     public final int maxWorldCol = 64;
@@ -36,7 +37,8 @@ public class GamePanel extends JPanel implements Runnable {
     //System
     public KeyHandler keyHandler = new KeyHandler(this);
     public MouseHandler mouseHandler = new MouseHandler(this);
-    public Sound sound = new Sound();
+    public Sound music = new Sound();
+    public Sound soundEffect = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public TileManager tileManager = new TileManager(this);
@@ -62,6 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int pauseState = 2;
     public final int dialogueState = 3;
     public final int titleState = 4;
+    public final int optionsState = 5;
 
 
     public GamePanel(){
@@ -81,7 +84,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame(){
-        gameState = titleState;
+        gameState = playState;
         assetSetter.setObject();
         assetSetter.setNPC();
         assetSetter.setMonster();
@@ -264,18 +267,18 @@ public class GamePanel extends JPanel implements Runnable {
         g.dispose();
     }
     public void playMusic(int i){
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
 
     public void stopMusic(){
-        sound.stop();
+        music.stop();
     }
 
     public void playSoundEffect(int i){
-        sound.setFile(i);
-        sound.play();
+        soundEffect.setFile(i);
+        soundEffect.play();
     }
 
 }

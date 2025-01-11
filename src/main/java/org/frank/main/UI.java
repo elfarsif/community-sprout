@@ -26,6 +26,7 @@ public class UI {
     BufferedImage health1, health2, health3;
     public int slotCol = 0;
     public int slotRow = 0;
+    int subState = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -91,6 +92,218 @@ public class UI {
         if(gp.gameState == gp.titleState){
             drawTitleScreen();
         }
+
+        //OPTIONS STATE
+        if(gp.gameState == gp.optionsState){
+            drawOptionsScreen();
+        }
+
+
+    }
+
+    private void drawOptionsScreen() {
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(g2d.getFont().deriveFont(32F));
+
+        //SUB WINDOW
+        int frameX = gp.tileSize*6;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize*10;
+        int frameHeight = gp.tileSize*10;
+
+        drawSubWindow(frameX,frameY,frameWidth,frameHeight);
+
+        switch (subState){
+            case 0:
+                optionsTop(frameX,frameY);
+                break;
+            case 1:
+                optionsControl(frameX,frameY);
+                break;
+            case 2:
+                optionsExitGame(frameX,frameY);
+        }
+
+        gp.keyHandler.enterPressed = false;
+
+    }
+
+    private void optionsExitGame(int frameX, int frameY) {
+        int textX = frameX + gp.tileSize;
+        int textY = frameY + gp.tileSize*3;
+
+        currentDialog = "Are you sure you want to exit the game?";
+        g2d.drawString(currentDialog,textX,textY);
+
+        //YES
+        String text = "YES";
+        textX = getXforCenteredText(text)- frameX;
+        textY += gp.tileSize*2;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 0){
+            g2d.drawString(">",textX-30,textY);
+            if (gp.keyHandler.enterPressed){
+                subState = 0;
+                gp.gameState = gp.titleState;
+            }
+        }
+
+        //NO
+        text = "NO";
+        textX = getXforCenteredText(text)- frameX;
+        textY += gp.tileSize;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 1){
+            g2d.drawString(">",textX-30,textY);
+            if (gp.keyHandler.enterPressed){
+                subState = 0;
+                commandNum = 4;
+            }
+        }
+
+    }
+
+    private void optionsTop(int frameX, int frameY) {
+        int textX;
+        int textY;
+
+        //TITLE
+
+        String text = "OPTIONS";
+        textX = getXforCenteredText(text)- frameX;
+        textY = frameY + gp.tileSize;
+        g2d.drawString(text,textX,textY);
+
+        //FULL SCREEN ON/OFF
+        text = "FULL SCREEN";
+        textX = frameX+ gp.tileSize;
+        textY += gp.tileSize*2;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 0){
+            g2d.drawString(">",textX-30,textY);
+            if (gp.keyHandler.enterPressed){
+                if (!gp.fullScreenOn){
+                    gp.fullScreenOn = true;
+                }
+                else{
+                    gp.fullScreenOn = false;
+                }
+
+            }
+        }
+
+        //MUSIC
+        text = "MUSIC";
+        textY += gp.tileSize;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 1){
+            g2d.drawString(">",textX-30,textY);
+        }
+
+        //SOUND EFFECT
+        text = "SOUND EFFECT";
+        textY += gp.tileSize;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 2){
+            g2d.drawString(">",textX-30,textY);
+        }
+
+        //CONTROL
+        text = "CONTROL";
+        textY += gp.tileSize;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 3){
+            g2d.drawString(">",textX-30,textY);
+            if (gp.keyHandler.enterPressed){
+                subState = 1;
+                commandNum = 0;
+            }
+        }
+
+        //Exit
+        text = "EXIT";
+        textY += gp.tileSize;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 4){
+            g2d.drawString(">",textX-30,textY);
+            if (gp.keyHandler.enterPressed){
+                subState = 2;
+                commandNum = 0;
+            }
+        }
+
+        //BACK
+        text = "BACK";
+        textY += gp.tileSize*2;
+        g2d.drawString(text,textX,textY);
+        if (commandNum == 5){
+            g2d.drawString(">",textX-30,textY);
+        }
+
+        //FULL SCREEN CHECK BOX
+        textX = (int) (frameX + gp.tileSize*6.5);
+        textY = (int) (frameY + (int)gp.tileSize*2.5);
+        g2d.drawRect(textX,textY,gp.tileSize/3,gp.tileSize/3);
+        if (gp.fullScreenOn){
+            g2d.fillRect(textX,textY,gp.tileSize/3,gp.tileSize/3);
+        }
+
+        //MUSIC SLIDER
+        textY += gp.tileSize;
+        g2d.drawRect(textX,textY,gp.tileSize*3,gp.tileSize/3);
+        int volumeWidth = gp.tileSize*3/5 * gp.music.volumeScale;
+        g2d.fillRect(textX,textY,volumeWidth,gp.tileSize/3);
+
+        //SOUND EFFECT SLIDER
+        textY += gp.tileSize;
+        g2d.drawRect(textX,textY,gp.tileSize*3,gp.tileSize/3);
+        volumeWidth = gp.tileSize*3/5 * gp.soundEffect.volumeScale;
+        g2d.fillRect(textX,textY,volumeWidth,gp.tileSize/3);
+
+    }
+
+    public void optionsControl(int frameX, int frameY){
+        int textX;
+        int textY;
+
+        //TITLE
+        String text = "CONTROL";
+        textX = getXforCenteredText(text)- frameX;
+        textY = frameY + gp.tileSize;
+        g2d.drawString(text,textX,textY);
+
+        textX = frameX + gp.tileSize;
+        textY += gp.tileSize;
+        g2d.drawString("Move",textX,textY);
+        textY += gp.tileSize;
+        g2d.drawString("Attack",textX,textY);
+        textY += gp.tileSize;
+        g2d.drawString("shoot",textX,textY);
+        textY += gp.tileSize;
+        g2d.drawString("Pause",textX,textY);
+
+        textX = frameX + gp.tileSize*6;
+        textY = frameY + gp.tileSize*2;
+        g2d.drawString("WASD",textX,textY);
+        textY += gp.tileSize;
+        g2d.drawString("SPACE",textX,textY);
+        textY += gp.tileSize;
+        g2d.drawString("F",textX,textY);
+        textY += gp.tileSize;
+
+        //BACK
+        textX = frameX + gp.tileSize;
+        textY += gp.tileSize*2;
+        g2d.drawString("BACK",textX,textY);
+        if (commandNum == 0){
+            g2d.drawString(">",textX-30,textY);
+            if (gp.keyHandler.enterPressed){
+                subState = 0;
+                commandNum = 3;
+            }
+        }
+
+
 
 
     }
