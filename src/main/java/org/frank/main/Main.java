@@ -8,11 +8,15 @@ public class Main {
     public static void main(String[] args) {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        window.setUndecorated(true);
         window.setTitle("Community Sprout");
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
+
+        gamePanel.config.loadConfig();
+        if (gamePanel.fullScreenOn){
+            window.setUndecorated(true);
+        }
 
         window.pack();
 

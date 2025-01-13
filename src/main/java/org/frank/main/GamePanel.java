@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     //WORLD SETTINGS
     public final int maxWorldCol = 64;
     public final int maxWorldRow = 48;
+
     //System
     public KeyHandler keyHandler = new KeyHandler(this);
     public MouseHandler mouseHandler = new MouseHandler(this);
@@ -45,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     public UI ui = new UI(this);
     public Thread gameThread;
     public EventHandler eventHandler = new EventHandler(this);
+    Config config = new Config(this);
 
 
     //ENTITIES AND OBJECTS
@@ -90,12 +92,13 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setMonster();
         assetSetter.setInteractiveTiles();
         playMusic(0);
-        stopMusic();
 
         tempScreen = new BufferedImage(screenWidth,screenHeight,BufferedImage.TYPE_INT_ARGB);
         g2d = (Graphics2D) tempScreen.getGraphics();
 
-        setFullScreen();
+        if(fullScreenOn){
+            setFullScreen();
+        }
     }
 
     @Override

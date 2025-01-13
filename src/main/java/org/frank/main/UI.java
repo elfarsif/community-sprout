@@ -260,6 +260,7 @@ public class UI {
         volumeWidth = gp.tileSize*3/5 * gp.soundEffect.volumeScale;
         g2d.fillRect(textX,textY,volumeWidth,gp.tileSize/3);
 
+        gp.config.saveConfig();
     }
 
     public void optionsControl(int frameX, int frameY){
