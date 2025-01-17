@@ -25,8 +25,8 @@ public class CollisionChecker {
         switch (entity.direction){
             case "up":
                 entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize;
-                tile1 = gp.tileManager.mapTileNum[entityLeftCol][entityTopRow];
-                tile2 = gp.tileManager.mapTileNum[entityRightCol][entityTopRow];
+                tile1 = gp.tileManager.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+                tile2 = gp.tileManager.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
                 if(gp.tileManager.tile[tile1].collision ||
                         gp.tileManager.tile[tile2].collision){
                     entity.collisionOn = true;
@@ -34,8 +34,8 @@ public class CollisionChecker {
                 break;
             case "down":
                 entityBottomRow = (entityBottomWorldY + entity.speed) / gp.tileSize;
-                tile1 = gp.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
-                tile2 = gp.tileManager.mapTileNum[entityRightCol][entityBottomRow];
+                tile1 = gp.tileManager.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow];
+                tile2 = gp.tileManager.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow];
                 if(gp.tileManager.tile[tile1].collision ||
                         gp.tileManager.tile[tile2].collision){
                     entity.collisionOn = true;
@@ -43,8 +43,8 @@ public class CollisionChecker {
                 break;
             case "left":
                 entityLeftCol = (entityLeftWorldX - entity.speed) / gp.tileSize;
-                tile1 = gp.tileManager.mapTileNum[entityLeftCol][entityTopRow];
-                tile2 = gp.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
+                tile1 = gp.tileManager.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+                tile2 = gp.tileManager.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow];
                 if(gp.tileManager.tile[tile1].collision ||
                         gp.tileManager.tile[tile2].collision){
                     entity.collisionOn = true;
@@ -52,8 +52,8 @@ public class CollisionChecker {
                 break;
             case "right":
                 entityRightCol = (entityRightWorldX + entity.speed) / gp.tileSize;
-                tile1 = gp.tileManager.mapTileNum[entityRightCol][entityTopRow];
-                tile2 = gp.tileManager.mapTileNum[entityRightCol][entityBottomRow];
+                tile1 = gp.tileManager.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
+                tile2 = gp.tileManager.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow];
                 if(gp.tileManager.tile[tile1].collision ||
                         gp.tileManager.tile[tile2].collision){
                     entity.collisionOn = true;
@@ -65,21 +65,21 @@ public class CollisionChecker {
     public int checkObject(Entity entity, boolean player){
 
         int index = 999;
-        for (int i = 0; i < gp.objects.length; i++) {
-            if (gp.objects[i]!=null){
+        for (int i = 0; i < gp.objects[1].length; i++) {
+            if (gp.objects[gp.currentMap][i]!=null){
                 //Get entity solid area position
                 entity.solidArea.x = entity.solidArea.x + entity.worldX;
                 entity.solidArea.y = entity.solidArea.y + entity.worldY;
 
                 //get object solid area position
-                gp.objects[i].solidArea.x = gp.objects[i].worldX + gp.objects[i].solidArea.x;
-                gp.objects[i].solidArea.y = gp.objects[i].worldY + gp.objects[i].solidArea.y;
+                gp.objects[gp.currentMap][i].solidArea.x = gp.objects[gp.currentMap][i].worldX + gp.objects[gp.currentMap][i].solidArea.x;
+                gp.objects[gp.currentMap][i].solidArea.y = gp.objects[gp.currentMap][i].worldY + gp.objects[gp.currentMap][i].solidArea.y;
 
                 switch (entity.direction){
                     case "up":
                         entity.solidArea.y -= entity.speed;
-                        if (entity.solidArea.intersects(gp.objects[i].solidArea)){
-                            if (gp.objects[i].collision){
+                        if (entity.solidArea.intersects(gp.objects[gp.currentMap][i].solidArea)){
+                            if (gp.objects[gp.currentMap][i].collision){
                                 entity.collisionOn = true;
                             }
                             if (player){
@@ -89,8 +89,8 @@ public class CollisionChecker {
                         break;
                     case "down":
                         entity.solidArea.y += entity.speed;
-                        if (entity.solidArea.intersects(gp.objects[i].solidArea)){
-                            if (gp.objects[i].collision){
+                        if (entity.solidArea.intersects(gp.objects[gp.currentMap][i].solidArea)){
+                            if (gp.objects[gp.currentMap][i].collision){
                                 entity.collisionOn = true;
                             }
                             if (player){
@@ -100,8 +100,8 @@ public class CollisionChecker {
                         break;
                     case "left":
                         entity.solidArea.x -= entity.speed;
-                        if (entity.solidArea.intersects(gp.objects[i].solidArea)){
-                            if (gp.objects[i].collision){
+                        if (entity.solidArea.intersects(gp.objects[gp.currentMap][i].solidArea)){
+                            if (gp.objects[gp.currentMap][i].collision){
                                 entity.collisionOn = true;
                             }
                             if (player){
@@ -111,8 +111,8 @@ public class CollisionChecker {
                         break;
                     case "right":
                         entity.solidArea.x += entity.speed;
-                        if (entity.solidArea.intersects(gp.objects[i].solidArea)){
-                            if (gp.objects[i].collision){
+                        if (entity.solidArea.intersects(gp.objects[gp.currentMap][i].solidArea)){
+                            if (gp.objects[gp.currentMap][i].collision){
                                 entity.collisionOn = true;
                             }
                             if (player){
@@ -125,25 +125,25 @@ public class CollisionChecker {
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
 
-                gp.objects[i].solidArea.x = gp.objects[i].solidAreaDefaultX;
-                gp.objects[i].solidArea.y = gp.objects[i].solidAreaDefaultY;
+                gp.objects[gp.currentMap][i].solidArea.x = gp.objects[gp.currentMap][i].solidAreaDefaultX;
+                gp.objects[gp.currentMap][i].solidArea.y = gp.objects[gp.currentMap][i].solidAreaDefaultY;
 
             }
         }
         return index;
     }
 
-    public int checkEntity(Entity entity,Entity[] target){
+    public int checkEntity(Entity entity,Entity[][] target){
         int index = 999;
-        for (int i = 0; i < target.length; i++) {
-            if (target[i]!=null){
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[gp.currentMap][i]!=null){
                 //Get entity solid area position
                 entity.solidArea.x = entity.solidArea.x + entity.worldX;
                 entity.solidArea.y = entity.solidArea.y + entity.worldY;
 
                 //get object solid area position
-                target[i].solidArea.x = target[i].worldX + target[i].solidArea.x;
-                target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
+                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].worldX + target[gp.currentMap][i].solidArea.x;
+                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].worldY + target[gp.currentMap][i].solidArea.y;
 
                 switch (entity.direction){
                     case "up":
@@ -160,8 +160,8 @@ public class CollisionChecker {
                         break;
                 }
 
-                if (entity.solidArea.intersects(target[i].solidArea)){
-                    if (target[i] != entity){
+                if (entity.solidArea.intersects(target[gp.currentMap][i].solidArea)){
+                    if (target[gp.currentMap][i] != entity){
                         entity.collisionOn = true;
                         index = i;
                     }
@@ -170,8 +170,8 @@ public class CollisionChecker {
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
 
-                target[i].solidArea.x = target[i].solidAreaDefaultX;
-                target[i].solidArea.y = target[i].solidAreaDefaultY;
+                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].solidAreaDefaultX;
+                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].solidAreaDefaultY;
 
             }
         }

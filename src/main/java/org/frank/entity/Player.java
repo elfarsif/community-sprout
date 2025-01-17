@@ -19,8 +19,6 @@ public class Player extends Entity {
 
     public final int screenX;
     public final int screenY;
-    public ArrayList<Entity> inventory = new ArrayList<Entity>();
-    public final int maxInventorySize = 10;
 
     public Player(GamePanel gp, KeyHandler keyHandler) {
         super(gp);
@@ -302,16 +300,16 @@ public class Player extends Entity {
     public void hitInteractiveTile(int i) {
         int counter = 0;
         if (i != 999
-                && gp.iTiles[i].destructible
-                && gp.iTiles[i].isCorrectTool(this)
-                && !gp.iTiles[i].invincible) {
+                && gp.iTiles[gp.currentMap][i].destructible
+                && gp.iTiles[gp.currentMap][i].isCorrectTool(this)
+                && !gp.iTiles[gp.currentMap][i].invincible) {
 
             gp.ui.addMessage("You destroyed ");
-            gp.iTiles[i].currentLife--;
-            gp.iTiles[i].invincible = true;
+            gp.iTiles[gp.currentMap][i].currentLife--;
+            gp.iTiles[gp.currentMap][i].invincible = true;
 
-            if (gp.iTiles[i].currentLife == 0){
-                gp.iTiles[i] = gp.iTiles[i].getDestroyedTile();
+            if (gp.iTiles[gp.currentMap][i].currentLife == 0){
+                gp.iTiles[gp.currentMap][i] = gp.iTiles[gp.currentMap][i].getDestroyedTile();
             }
 
         }
@@ -379,24 +377,24 @@ public class Player extends Entity {
 
     public void damageMonster(int monsterIndex, int attack) {
         if (monsterIndex != 999) {
-            if (!gp.monsters[monsterIndex].invincible){
+            if (!gp.monsters[gp.currentMap][monsterIndex].invincible){
 
                 //CALCULATE DAMAGE TO MONSTER
-                int damage = attack - gp.monsters[monsterIndex].defense;
+                int damage = attack - gp.monsters[gp.currentMap][monsterIndex].defense;
                 if(damage < 0){
                     damage = 0;
                 }
-                gp.monsters[monsterIndex].currentLife -= damage;
+                gp.monsters[gp.currentMap][monsterIndex].currentLife -= damage;
                 gp.ui.addMessage( damage + " damage!");
 
                 //MONSTER REACTION
-                gp.monsters[monsterIndex].invincible = true;
-                gp.monsters[monsterIndex].damageReaction();
+                gp.monsters[gp.currentMap][monsterIndex].invincible = true;
+                gp.monsters[gp.currentMap][monsterIndex].damageReaction();
 
-                if(gp.monsters[monsterIndex].currentLife <= 0){
-                    gp.monsters[monsterIndex].dying = true;
-                    gp.ui.addMessage("+ "+gp.monsters[monsterIndex].exp+" exp");
-                    exp+=gp.monsters[monsterIndex].exp;
+                if(gp.monsters[gp.currentMap][monsterIndex].currentLife <= 0){
+                    gp.monsters[gp.currentMap][monsterIndex].dying = true;
+                    gp.ui.addMessage("+ "+gp.monsters[gp.currentMap][monsterIndex].exp+" exp");
+                    exp+=gp.monsters[gp.currentMap][monsterIndex].exp;
                     checkLevelUp();
                 }
             }
@@ -422,9 +420,9 @@ public class Player extends Entity {
 
     private void contactMonster(int monsterIndex) {
         if (monsterIndex != 999) {
-            if (!invincible && gp.monsters[monsterIndex].dying == false) {
+            if (!invincible && gp.monsters[gp.currentMap][monsterIndex].dying == false) {
                 //CALCULATE MONSTER DAMAGE TO PLAYER
-                int damage = gp.monsters[monsterIndex].attack - defense;
+                int damage = gp.monsters[gp.currentMap][monsterIndex].attack - defense;
                 if(damage < 0){
                     damage = 0;
                 }
@@ -452,13 +450,13 @@ public class Player extends Entity {
         if (gp.keyHandler.spacePressed) {
             if (i != 999) {
                 gp.gameState = gp.dialogueState;
-                gp.npc[i].speak();
+                gp.npc[gp.currentMap][i].speak();
             } else {
                 gp.playSoundEffect(3);
                 attacking = true;
             }
         }
-        gp.keyHandler.spacePressed = false;
+//        gp.keyHandler.spacePressed = false;
     }
 
     public void pickUpObject(int objectIndex) {
@@ -467,13 +465,13 @@ public class Player extends Entity {
 
             String text;
             if (inventory.size() != maxInventorySize) {
-                inventory.add(gp.objects[objectIndex]);
-                text = "You picked up " + gp.objects[objectIndex].name;
+                inventory.add(gp.objects[gp.currentMap][objectIndex]);
+                text = "You picked up " + gp.objects[gp.currentMap][objectIndex].name;
             }else {
                 text = "inventory is full";
             }
             gp.ui.addMessage(text);
-            gp.objects[objectIndex] = null;
+            gp.objects[gp.currentMap][objectIndex] = null;
         }
     }
 

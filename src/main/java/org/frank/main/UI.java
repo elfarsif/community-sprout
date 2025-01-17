@@ -27,6 +27,8 @@ public class UI {
     public int slotCol = 0;
     public int slotRow = 0;
     int subState = 0;
+    int counter = 0;
+    public Entity npc;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -97,6 +99,67 @@ public class UI {
         if(gp.gameState == gp.optionsState){
             drawOptionsScreen();
         }
+
+        //TRANSITION MAP STATE
+        if(gp.gameState == gp.transitionMapState){
+            drawTransitionMapAnimation();
+        }
+
+        //TRADE STATE
+        if(gp.gameState == gp.tradeState){
+            drawTradeScreen();
+        }
+
+
+    }
+
+    private void drawTradeScreen() {
+        switch (subState){
+            case 0:
+                tradeSelect();
+                break;
+            case 1:
+                tradeBuy();
+                break;
+            case 2:
+                tradeSell();
+                break;
+        }
+        gp.keyHandler.enterPressed = false;
+    }
+
+    private void tradeSell() {
+
+    }
+
+    private void tradeBuy() {
+
+    }
+
+    private void tradeSelect() {
+        drawDialogScreen();
+
+        //DRAW WINDOW
+        int x = gp.tileSize*15;
+        int y = gp.tileSize*4;
+        int width = gp.tileSize*10;
+        int height = gp.tileSize*10;
+        drawSubWindow(x,y,width,height);
+    }
+
+    private void drawTransitionMapAnimation() {
+         counter++;
+         g2d.setColor(new Color(0,0,0,counter*5));
+         g2d.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+         if (counter ==50){
+             counter = 0;
+             gp.gameState = gp.playState;
+             gp.currentMap = gp.eventHandler.tempMap;
+             gp.player.worldX = gp.eventHandler.tempCol * gp.tileSize;
+             gp.player.worldY = gp.eventHandler.tempRow * gp.tileSize;
+             gp.eventHandler.previousEventX = gp.player.worldX;
+             gp.eventHandler.previousEventY = gp.player.worldY;
+         }
 
 
     }
