@@ -12,6 +12,7 @@ public class Oscael extends Entity {
 
         direction = "down";
         speed = 1;
+        onPath = true;
 
         getPlayerImage();
         setDialogs();
@@ -39,33 +40,45 @@ public class Oscael extends Entity {
 
     @Override
     public void setAction(){
-        actionLookCounter++;
-        if(actionLookCounter == 120){
-            Random random = new Random();
-            int i = random.nextInt(20)+1;
+        if (onPath){
+            int goalCol = 29;
+            int goalRow = 30;
+            this.searchPath(goalCol, goalRow);
 
-            if (i <= 5) {
-                direction="up";
-            }
-            if (i > 5 && i <= 10) {
-                direction="down";
-            }
-            if (i > 10 && i <= 15) {
-                direction="left";
-            }
-            if (i > 15 && i <= 20) {
-                direction="right";
+
+
+        }else {
+
+            actionLookCounter++;
+            if (actionLookCounter == 120) {
+                Random random = new Random();
+                int i = random.nextInt(20) + 1;
+
+                if (i <= 5) {
+                    direction = "up";
+                }
+                if (i > 5 && i <= 10) {
+                    direction = "down";
+                }
+                if (i > 10 && i <= 15) {
+                    direction = "left";
+                }
+                if (i > 15 && i <= 20) {
+                    direction = "right";
+                }
+
+                actionLookCounter = 0;
             }
 
-            actionLookCounter = 0;
         }
-
-
     }
 
     @Override
     public void speak(){
         super.speak();
+
+        onPath = true;
+        gp.ui.addMessage(String.valueOf(onPath));
     }
 
 }

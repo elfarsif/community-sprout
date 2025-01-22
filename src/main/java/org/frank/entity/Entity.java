@@ -1,5 +1,6 @@
 package org.frank.entity;
 
+import org.frank.ai.Node;
 import org.frank.main.GamePanel;
 import org.frank.main.UtilityTool;
 
@@ -39,6 +40,7 @@ public abstract class Entity {
     public boolean alive = true;
     public boolean dying = false;
     boolean hpBarOn = false;
+    public boolean onPath = false;
 
     //COUNTERS
     public int invincibleCounter = 0;
@@ -93,12 +95,17 @@ public abstract class Entity {
      */
     private void setDefaultSolidArea() {
         solidArea = new Rectangle();
-        solidArea.x = 12 * 3;
-        solidArea.y = 24 * 3;
+        solidArea.x = 12 * gp.scale;
+        solidArea.y = 24 * gp.scale;
+//        solidArea.x = 1;
+//        solidArea.y = 1;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 8 * 3;
-        solidArea.height = 8 * 3;
+//        solidArea.width = gp.tileSize-3;
+//        solidArea.height = gp.tileSize-3;
+
+        solidArea.width = 8 * gp.scale;
+        solidArea.height = 8 * gp.scale;
 
     }
 
@@ -111,16 +118,7 @@ public abstract class Entity {
 
     public void update() {
         setAction();
-        collisionOn = false;
-        gp.collisionChecker.checkTile(this);
-        gp.collisionChecker.checkObject(this, false);
-        gp.collisionChecker.checkEntity(this, gp.npc);
-        gp.collisionChecker.checkEntity(this, gp.monsters);
-        boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
-
-        if (this.type == type_monster && contactPlayer) {
-           damagePlayer(attack);
-        }
+        checkCollision();
 
         if (!collisionOn) {
             switch (direction) {
@@ -168,6 +166,103 @@ public abstract class Entity {
             gp.player.currentLife -= damage;
             gp.player.invincible = true;
         }
+    }
+
+    public void checkCollision(){
+        collisionOn = false;
+        gp.collisionChecker.checkTile(this);
+        gp.collisionChecker.checkObject(this, false);
+        gp.collisionChecker.checkEntity(this, gp.npc);
+        gp.collisionChecker.checkEntity(this, gp.monsters);
+        boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
+
+        if (this.type == type_monster && contactPlayer) {
+            damagePlayer(attack);
+        }
+    }
+
+    public void searchPath(int goalCol, int goalRow) {
+        int startCol = (worldX +solidArea.x) / gp.tileSize;
+        int startRow = (worldY +solidArea.y) / gp.tileSize;
+
+        gp.pathFinder.setNodes(startCol, startRow, goalCol, goalRow,this);
+
+
+        if(gp.pathFinder.search()){
+            int nextX = gp.pathFinder.pathList.get(0).col*gp.tileSize;
+            int nextY = gp.pathFinder.pathList.get(0).row*gp.tileSize;
+
+            //Entitt solid position
+            int entityLeftX = worldX + solidArea.x;
+            int entityRightX = worldX + solidArea.x + solidArea.width;
+            int entityTopY = worldY + solidArea.y;
+            int entityBottomY = worldY + solidArea.y + solidArea.height;
+
+            if (entityTopY > nextY && entityLeftX >= nextX && entityRightX < nextX + gp.tileSize){
+                direction = "up";
+            }
+            else if (entityTopY < nextY && entityLeftX >= nextX && entityRightX < nextX+gp.tileSize){
+                direction = "down";
+            }
+            else if (entityTopY >= nextY && entityBottomY < nextY + gp.tileSize){
+                //left or right
+                if (entityLeftX > nextX){
+                    direction = "left";
+                }
+                if (entityRightX < nextX){
+                    direction = "right";
+                }
+            }
+            //cant move because of collision
+            else if (entityTopY > nextY && entityLeftX > nextX){
+                //up or left
+                direction = "up";
+                checkCollision();
+                if (collisionOn){
+                    direction = "left";
+                }
+            }
+            else if (entityTopY > nextY && entityLeftX < nextX){
+                //up or right
+                direction = "up";
+                checkCollision();
+                if (collisionOn){
+                    direction = "right";
+                }
+            }
+            else if (entityTopY < nextY && entityLeftX > nextX){
+                //down or left
+                direction = "down";
+                checkCollision();
+                if (collisionOn){
+                    direction = "left";
+                }
+            }
+            else if (entityTopY < nextY && entityLeftX < nextX){
+                //down or right
+                direction = "down";
+                checkCollision();
+                if (collisionOn){
+                    direction = "right";
+                }
+            }
+
+            //if reaches the goal, stop the search
+            int nextCol = gp.pathFinder.pathList.get(0).col;
+            int nextRow = gp.pathFinder.pathList.get(0).row;
+            if (nextCol == goalCol && nextRow == goalRow){
+                System.out.println("goal reached");
+                onPath = false;
+            }
+            else {
+                onPath = true;
+            }
+
+
+
+        }
+
+
     }
 
     public BufferedImage setup(String path) {
@@ -263,6 +358,8 @@ public abstract class Entity {
 
             g2d.drawImage(image, screenX, screenY, null);
 
+            drawCollisionArea(g2d,screenX,screenY);
+
             changeAlphaForDyingAnimationa(g2d,1f);
         }
 
@@ -327,6 +424,15 @@ public abstract class Entity {
         }
         gp.ui.currentDialog = dialogs[dialogIndex];
         dialogIndex++;
+    }
+
+    /**
+     * Draws the collision area of the entity
+     * Call method in the draw method of the entity
+     */
+    public void drawCollisionArea(Graphics2D g2d,int screenX,int screenY) {
+        g2d.setColor(Color.WHITE);
+        g2d.drawRect(screenX+solidArea.x, screenY+solidArea.y, solidArea.width, solidArea.height);
     }
 
 

@@ -20,12 +20,16 @@ public class AssetSetter {
         gp.objects[mapNum][0].worldX = 30 * gp.tileSize;
         gp.objects[mapNum][0].worldY = 12 * gp.tileSize;
 
+        gp.objects[mapNum][1] = new SwordCopper(gp);
+        gp.objects[mapNum][1].worldX = 12 * gp.tileSize;
+        gp.objects[mapNum][1].worldY = 40 * gp.tileSize;
+
     }
 
     public void setNPC(){
         int mapNum =0;
         gp.npc[mapNum][0] = new Oscael(gp);
-        gp.npc[mapNum][0].worldX = 30 * gp.tileSize;
+        gp.npc[mapNum][0].worldX = 32 * gp.tileSize;
         gp.npc[mapNum][0].worldY = 10* gp.tileSize;
 
         mapNum = 1;

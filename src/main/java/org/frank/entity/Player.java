@@ -29,12 +29,12 @@ public class Player extends Entity {
         screenY = gp.screenHeight / 2 - gp.tileSize / 2;
 
         solidArea = new Rectangle();
-        solidArea.x = 12 * 3;
-        solidArea.y = 24 * 3;
+        solidArea.x = 12 * gp.scale;
+        solidArea.y = 24 * gp.scale;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 8 * 3;
-        solidArea.height = 8 * 3;
+        solidArea.width = 8 * gp.scale;
+        solidArea.height = 8 * gp.scale;
 
         attackArea.width = gp.tileSize;
         attackArea.height = gp.tileSize;
@@ -677,7 +677,7 @@ public class Player extends Entity {
 
         //prevent UI from being transparent
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-
+        this.drawCollisionArea(g2d,screenX,screenY);
     }
 
 }

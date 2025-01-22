@@ -1,5 +1,6 @@
 package org.frank.main;
 
+import org.frank.ai.PathFinder;
 import org.frank.entity.Entity;
 import org.frank.entity.Player;
 import org.frank.tile.TileManager;
@@ -49,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Thread gameThread;
     public EventHandler eventHandler = new EventHandler(this);
     Config config = new Config(this);
-
+    public PathFinder pathFinder = new PathFinder(this);
 
     //ENTITIES AND OBJECTS
     public Player player = new Player(this, keyHandler);
