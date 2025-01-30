@@ -133,7 +133,9 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             switch (gp.ui.commandNum){
                 case 0:
-                    System.out.println("New Game not implemented");
+                    gp.gameState = gp.cutsceneState;
+                    gp.cutsceneManager.sceneNum = gp.cutsceneManager.gameStart;
+
                     break;
                 case 1:
                     gp.gameState = gp.playState;

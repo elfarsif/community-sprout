@@ -118,9 +118,9 @@ public class PathFinder {
     }
 
     public boolean search(){
-        //TODO:BUG search doesnt return true
+        //step counter is limited by fps, so if the goal is far is requires more steps to iterate through
 
-        while(!goalReached && step <500){
+        while(!goalReached && step <900){
             int col = currentNode.col;
             int row = currentNode.row;
 

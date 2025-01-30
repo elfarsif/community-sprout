@@ -62,6 +62,9 @@ public class EventHandler {
             else if(hit(1,32,8,"up")){
                 switchToMap(0,29,8);
             }
+            else if (hit(0,32,9,"any")){
+                this.oscaelMeetingCutscene();
+            }
         }
 
     }
@@ -113,6 +116,11 @@ public class EventHandler {
         }
 
         return hit;
+    }
+
+    public void oscaelMeetingCutscene(){
+        gp.gameState = gp.cutsceneState;
+        gp.cutsceneManager.sceneNum = gp.cutsceneManager.oscaelIntro;
     }
 
 

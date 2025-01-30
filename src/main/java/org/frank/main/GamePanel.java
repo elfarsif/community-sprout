@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     public EventHandler eventHandler = new EventHandler(this);
     Config config = new Config(this);
     public PathFinder pathFinder = new PathFinder(this);
+    public CutsceneManager cutsceneManager = new CutsceneManager(this);
 
     //ENTITIES AND OBJECTS
     public Player player = new Player(this, keyHandler);
@@ -72,6 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int optionsState = 5;
     public final int transitionMapState = 6;
     public final int tradeState = 7;
+    public final int cutsceneState = 8;
 
 
     public GamePanel(){
@@ -91,7 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame(){
-        gameState = playState;
+        gameState = titleState;
         assetSetter.setObject();
         assetSetter.setNPC();
         assetSetter.setMonster();
@@ -240,12 +242,14 @@ public class GamePanel extends JPanel implements Runnable {
             }
             //EMPTY LIST
             entities.clear();
-
+            //DRAW CUSTSCENE
+            cutsceneManager.draw(g2d);
             //UI
             ui.draw(g2d);
 
 
         }
+
 
         //DEBUG
         if(keyHandler.tPressed){

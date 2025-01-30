@@ -12,7 +12,6 @@ public class Oscael extends Entity {
 
         direction = "down";
         speed = 1;
-        onPath = true;
 
         getPlayerImage();
         setDialogs();
@@ -23,8 +22,6 @@ public class Oscael extends Entity {
         dialogs[1] = "I am Oscael.";
         dialogs[2] = "I am the guardian of this forest.";
         dialogs[3] = "I am here to help you.";
-        dialogs[4] = "You can ask me anything.";
-        dialogs[5] = "Just press 'E' to talk to me.";
     }
 
     public void getPlayerImage() {
@@ -43,6 +40,7 @@ public class Oscael extends Entity {
         if (onPath){
             int goalCol = 29;
             int goalRow = 30;
+
             this.searchPath(goalCol, goalRow);
 
 

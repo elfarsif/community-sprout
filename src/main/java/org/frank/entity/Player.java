@@ -463,15 +463,22 @@ public class Player extends Entity {
 
         if (objectIndex != 999) {
 
-            String text;
-            if (inventory.size() != maxInventorySize) {
-                inventory.add(gp.objects[gp.currentMap][objectIndex]);
-                text = "You picked up " + gp.objects[gp.currentMap][objectIndex].name;
-            }else {
-                text = "inventory is full";
+            if(gp.objects[gp.currentMap][objectIndex].type == type_obstacle){
+                if (keyHandler.spacePressed == true){
+                    gp.objects[gp.currentMap][objectIndex].interact();
+                }
+            }else{
+                String text;
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(gp.objects[gp.currentMap][objectIndex]);
+                    text = "You picked up " + gp.objects[gp.currentMap][objectIndex].name;
+                }else {
+                    text = "inventory is full";
+                }
+                gp.ui.addMessage(text);
+                gp.objects[gp.currentMap][objectIndex] = null;
             }
-            gp.ui.addMessage(text);
-            gp.objects[gp.currentMap][objectIndex] = null;
+
         }
     }
 
@@ -673,7 +680,9 @@ public class Player extends Entity {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         }
 
-        g2d.drawImage(image, screenX, screenY, null);
+        if (drawing){
+            g2d.drawImage(image, screenX, screenY, null);
+        }
 
         //prevent UI from being transparent
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
