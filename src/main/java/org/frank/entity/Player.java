@@ -178,6 +178,14 @@ public class Player extends Entity {
             attackRight4 = setup("/player/attack/copper_sword/right4.png");
         }
 
+        if (currentWeapon.type == type_axe){
+            attackDown1 = setup("/player/attack/axe/down1.png");
+            attackDown2 = setup("/player/attack/axe/down2.png");
+            attackDown3 = setup("/player/attack/axe/down4.png");
+            attackDown4 = setup("/player/attack/axe/down5.png");
+
+        }
+
     }
 
     public void update() {
@@ -487,7 +495,8 @@ public class Player extends Entity {
         if (itemIndex < inventory.size()){
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.type == type_sword || selectedItem.type == type_sword_copper){
+            if (selectedItem.type == type_sword || selectedItem.type == type_sword_copper ||
+                    selectedItem.type== type_axe){
                 currentWeapon = selectedItem;
                 attack = getAttackValue();
                 getPlayerAttackImage();

@@ -3,6 +3,7 @@ package org.frank.main;
 import org.frank.entity.Oscael;
 import org.frank.entity.StoreClerk;
 import org.frank.monster.GreenSlime;
+import org.frank.object.Axe;
 import org.frank.object.Door;
 import org.frank.object.SingleBed;
 import org.frank.object.SwordCopper;
@@ -29,6 +30,10 @@ public class AssetSetter {
         gp.objects[mapNum][2] = new SingleBed(gp);
         gp.objects[mapNum][2].worldX = 35 * gp.tileSize;
         gp.objects[mapNum][2].worldY = 18 * gp.tileSize;
+
+        gp.objects[mapNum][3] = new Axe(gp);
+        gp.objects[mapNum][3].worldX = 32 * gp.tileSize;
+        gp.objects[mapNum][3].worldY = 12 * gp.tileSize;
 
 
     }

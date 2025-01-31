@@ -66,7 +66,9 @@ public class CutsceneManager {
 
 
     public void gameStartCutscene(){
-        System.out.println("gameStartCutscene");
+        gp.currentMap = 2;
+        gp.player.worldX = 5 * gp.tileSize;
+        gp.player.worldY = 5 * gp.tileSize;
     }
 
 }

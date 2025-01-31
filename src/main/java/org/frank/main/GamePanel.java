@@ -3,6 +3,7 @@ package org.frank.main;
 import org.frank.ai.PathFinder;
 import org.frank.entity.Entity;
 import org.frank.entity.Player;
+import org.frank.tile.Map;
 import org.frank.tile.TileManager;
 import org.frank.tile_interactive.InteractiveTile;
 
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxWorldRow = 48;
     public final int maxMap=10;
     public int currentMap = 0;
+    public Map parentsHome = new Map(10,10);
 
     //System
     public KeyHandler keyHandler = new KeyHandler(this);

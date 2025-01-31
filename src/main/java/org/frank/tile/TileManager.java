@@ -21,12 +21,13 @@ public class TileManager {
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
-        tile = new Tile[50];
+        tile = new Tile[100];
         mapTileNum = new int[gamePanel.maxMap][gamePanel.maxWorldCol][gamePanel.maxWorldRow];
 
         getTileImage();
         loadMap("/maps/worldMap.txt",0);
         loadMap("/maps/worldMap2.txt",1);
+        loadMap("/maps/parenthome.txt",2);
 
     }
 
@@ -79,6 +80,58 @@ public class TileManager {
         setup(44, "/tiles/house/house-4-1.png", true);
         setup(45, "/tiles/house/house-4-2.png", true);
         setup(46, "/tiles/house/house-4-3.png", true);
+
+        //map parents house
+        setup(47,"/tiles/parent_home/00-00.png",false);
+        setup(48,"/tiles/parent_home/00-01.png",false);
+        setup(49,"/tiles/parent_home/00-02.png",false);
+        setup(50,"/tiles/parent_home/00-03.png",false);
+        setup(51,"/tiles/parent_home/00-04.png",false);
+        setup(52,"/tiles/parent_home/00-05.png",false);
+        setup(53,"/tiles/parent_home/00-06.png",false);
+        setup(54,"/tiles/parent_home/00-07.png",false);
+        setup(55,"/tiles/parent_home/00-08.png",false);
+        setup(56,"/tiles/parent_home/00-09.png",false);
+        setup(57,"/tiles/parent_home/00-10.png",false);
+        setup(57,"/tiles/parent_home/00-11.png",false);
+        setup(58,"/tiles/parent_home/01-00.png",false);
+        setup(59,"/tiles/parent_home/01-01.png",false);
+        setup(60,"/tiles/parent_home/01-02.png",false);
+        setup(61,"/tiles/parent_home/01-03.png",false);
+        setup(62,"/tiles/parent_home/01-04.png",false);
+        setup(63,"/tiles/parent_home/01-05.png",false);
+        setup(64,"/tiles/parent_home/01-06.png",false);
+        setup(65,"/tiles/parent_home/01-07.png",false);
+        setup(66,"/tiles/parent_home/01-08.png",false);
+        setup(67,"/tiles/parent_home/01-09.png",false);
+        setup(68,"/tiles/parent_home/01-10.png",false);
+        setup(69,"/tiles/parent_home/01-11.png",false);
+        setup(70,"/tiles/parent_home/02-00.png",false);
+        setup(71,"/tiles/parent_home/02-01.png",false);
+        setup(72,"/tiles/parent_home/02-02.png",false);
+        setup(73,"/tiles/parent_home/02-03.png",false);
+        setup(74,"/tiles/parent_home/02-04.png",false);
+        setup(75,"/tiles/parent_home/02-05.png",false);
+        setup(76,"/tiles/parent_home/02-06.png",false);
+        setup(77,"/tiles/parent_home/02-07.png",false);
+        setup(78,"/tiles/parent_home/02-08.png",false);
+        setup(79,"/tiles/parent_home/02-09.png",false);
+        setup(80,"/tiles/parent_home/02-10.png",false);
+        setup(81,"/tiles/parent_home/02-11.png",false);
+        setup(82,"/tiles/parent_home/03-00.png",false);
+        setup(83,"/tiles/parent_home/03-01.png",false);
+        setup(84,"/tiles/parent_home/03-02.png",false);
+        setup(85,"/tiles/parent_home/03-03.png",false);
+        setup(86,"/tiles/parent_home/03-04.png",false);
+        setup(87,"/tiles/parent_home/03-05.png",false);
+        setup(88,"/tiles/parent_home/03-06.png",false);
+        setup(89,"/tiles/parent_home/03-07.png",false);
+        setup(90,"/tiles/parent_home/03-08.png",false);
+        setup(91,"/tiles/parent_home/03-09.png",false);
+        setup(92,"/tiles/parent_home/03-10.png",false);
+        setup(93,"/tiles/parent_home/03-11.png",false);
+
+
     }
 
     public void setup(int index, String imagePath, boolean collision) {
@@ -94,28 +147,78 @@ public class TileManager {
     }
 
     public void loadMap(String filePath, int map) {
+        if (map ==2){
+            loadParentHomeMap(filePath,map);
+        }else{
+            try {
+                InputStream is = getClass().getResourceAsStream(filePath);
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+                int col = 0;
+                int row = 0;
+
+                while (col < gamePanel.maxWorldCol && row < gamePanel.maxWorldRow) {
+                    String line = br.readLine();
+
+                    while (col < gamePanel.maxWorldCol && row < gamePanel.maxWorldRow && line != null) {
+                        String[] numbers = line.split(" ");
+                        if (numbers.length-1<col){
+                            row++;
+                            break;
+                        }
+                        int num = Integer.parseInt(numbers[col]);
+
+                        mapTileNum[map][col][row] = num;
+                        col++;
+                    }
+
+                    if (col == gamePanel.maxWorldCol) {
+                        col = 0;
+                        row++;
+                    }
+
+
+                }
+                br.close();
+
+            } catch (Exception e) {
+                throw new RuntimeException("Map Loading error " + e);
+            }
+        }
+
+    }
+
+    private void loadParentHomeMap(String filePath, int map) {
         try {
             InputStream is = getClass().getResourceAsStream(filePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
+            int mapCol=11;
+            int mapRow=11;
+
             int col = 0;
             int row = 0;
 
-            while (col < gamePanel.maxWorldCol && row < gamePanel.maxWorldRow) {
+            while (col < mapCol && row < mapRow) {
                 String line = br.readLine();
 
-                while (col < gamePanel.maxWorldCol && row < gamePanel.maxWorldRow && line != null) {
+                while (col < mapCol && row < mapRow && line != null) {
                     String[] numbers = line.split(" ");
+                    if (numbers.length-1<col){
+                        row++;
+                        break;
+                    }
                     int num = Integer.parseInt(numbers[col]);
 
                     mapTileNum[map][col][row] = num;
                     col++;
                 }
 
-                if (col == gamePanel.maxWorldCol) {
+                if (col == mapCol) {
                     col = 0;
                     row++;
                 }
+
 
             }
             br.close();

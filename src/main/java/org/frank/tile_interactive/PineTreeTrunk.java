@@ -30,7 +30,7 @@ public class PineTreeTrunk extends InteractiveTile{
 
     public boolean isCorrectTool(Entity entity){
         boolean correctTool = false;
-        if(entity.currentWeapon.type== type_sword_copper){
+        if(entity.currentWeapon.type== type_axe){
             correctTool = true;
         }
         return correctTool;
