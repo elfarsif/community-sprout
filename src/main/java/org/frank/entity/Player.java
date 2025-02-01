@@ -6,13 +6,11 @@ import org.frank.object.Fireball;
 import org.frank.object.Mushroom;
 import org.frank.object.Shield;
 import org.frank.object.Sword;
-import org.frank.tile_interactive.InteractiveTile;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Entity {
     KeyHandler keyHandler;
@@ -183,6 +181,18 @@ public class Player extends Entity {
             attackDown2 = setup("/player/attack/axe/down2.png");
             attackDown3 = setup("/player/attack/axe/down4.png");
             attackDown4 = setup("/player/attack/axe/down5.png");
+            attackUp1 = setup("/player/attack/axe/up1.png");
+            attackUp2 = setup("/player/attack/axe/up2.png");
+            attackUp3 = setup("/player/attack/axe/up4.png");
+            attackUp4 = setup("/player/attack/axe/up5.png");
+            attackLeft1 = setup("/player/attack/axe/left1.png");
+            attackLeft2 = setup("/player/attack/axe/left2.png");
+            attackLeft3 = setup("/player/attack/axe/left4.png");
+            attackLeft4 = setup("/player/attack/axe/left5.png");
+            attackRight1 = setup("/player/attack/axe/right1.png");
+            attackRight2 = setup("/player/attack/axe/right2.png");
+            attackRight3 = setup("/player/attack/axe/right4.png");
+            attackRight4 = setup("/player/attack/axe/right5.png");
 
         }
 
@@ -421,7 +431,7 @@ public class Player extends Entity {
 
             //Display dialogue
             gp.gameState = gp.dialogueState;
-            gp.ui.currentDialog = "Congratulations! You are now level "+level;
+            gp.ui.currentDialogue = "Congratulations! You are now level "+level;
 
         }
     }
@@ -457,7 +467,6 @@ public class Player extends Entity {
     private void interactNPC(int i) {
         if (gp.keyHandler.spacePressed) {
             if (i != 999) {
-                gp.gameState = gp.dialogueState;
                 gp.npc[gp.currentMap][i].speak();
             } else {
                 gp.playSoundEffect(3);

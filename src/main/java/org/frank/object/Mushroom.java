@@ -24,7 +24,7 @@ public class Mushroom extends Entity {
     @Override
     public void applyConsumable(Entity entity){
         gp.gameState = gp.dialogueState;
-        gp.ui.currentDialog = "You ate the mushroom. You feel better."+healthValue+" health";
+        gp.ui.currentDialogue = "You ate the mushroom. You feel better."+healthValue+" health";
         entity.currentLife += healthValue;
         if (gp.player.currentLife > gp.player.maxLife){
             gp.player.currentLife = gp.player.maxLife;

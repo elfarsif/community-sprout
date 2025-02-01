@@ -63,7 +63,7 @@ public class EventHandler {
                 switchToMap(0,29,8);
             }
             else if (hit(0,32,9,"any")){
-                this.oscaelMeetingCutscene();
+//                this.oscaelMeetingCutscene();
             }
         }
 
@@ -83,7 +83,7 @@ public class EventHandler {
         //TODO: see transition between maps, to remove col and row potentially
         System.out.println("handle event");
         gp.gameState = 3;
-        gp.ui.currentDialog = "You fell in a pit";
+        gp.ui.currentDialogue = "You fell in a pit";
         gp.ui.draw(gp.g2d);
         eventRect[map][col][row].eventDone = false;
         gp.player.currentLife --;

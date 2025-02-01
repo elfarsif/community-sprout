@@ -179,7 +179,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawToTempScreen(){
         //DEBUG
         long drawStart = 0;
-        if(keyHandler.tPressed){
+        if(keyHandler.showDebug){
             drawStart = System.nanoTime();
         }
 
@@ -254,11 +254,22 @@ public class GamePanel extends JPanel implements Runnable {
 
 
         //DEBUG
-        if(keyHandler.tPressed){
+        if(keyHandler.showDebug){
             long drawEnd = System.nanoTime();
             long drawTime = drawEnd - drawStart;
-            g2d.drawString("Draw Time: " + drawTime, 10, 30);
-            System.out.println("Draw Time: " + drawTime);
+            g2d.setFont(new Font("Arial", Font.PLAIN, 20));
+            int x = 10;
+            int y = 400;
+            int lineHeight = 20;
+            g2d.drawString("Player X: " + player.worldX, x, y);
+            y += lineHeight;
+            g2d.drawString("Player Y: " + player.worldY, x, y);
+            y += lineHeight;
+            g2d.drawString("Player Col: " + (player.worldX+player.solidArea.x)/tileSize, x, y);
+            y += lineHeight;
+            g2d.drawString("Player Row: " + (player.worldY+player.solidArea.y)/tileSize, x, y);
+            y += lineHeight;
+            g2d.drawString("Draw Time: " + drawTime, x,y);
         }
 
     }

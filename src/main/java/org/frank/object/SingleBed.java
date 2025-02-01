@@ -26,7 +26,7 @@ public class SingleBed extends Entity {
     @Override
     public void interact(){
         gp.gameState = gp.dialogueState;
-        gp.ui.currentDialog = "The door is locked. you need an axe";
+        gp.ui.currentDialogue = "The door is locked. you need an axe";
     }
 
     @Override

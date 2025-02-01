@@ -153,7 +153,7 @@ public class TileManager {
             try {
                 InputStream is = getClass().getResourceAsStream(filePath);
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
+                System.out.println("Loading map " + filePath);
                 int col = 0;
                 int row = 0;
 
@@ -165,6 +165,9 @@ public class TileManager {
                         if (numbers.length-1<col){
                             row++;
                             break;
+                        }
+                        if (col==32 && row ==15){
+                            System.out.println("col: "+col+" row: "+row+" num: "+numbers[col]);
                         }
                         int num = Integer.parseInt(numbers[col]);
 

@@ -1,6 +1,5 @@
 package org.frank.entity;
 
-import org.frank.ai.Node;
 import org.frank.main.GamePanel;
 import org.frank.main.UtilityTool;
 
@@ -25,7 +24,7 @@ public abstract class Entity {
     public Rectangle solidArea;
     public int solidAreaDefaultX, solidAreaDefaultY;
     public Rectangle attackArea = new Rectangle(0,0,0,0);
-    String[] dialogs = new String[10];
+    public String[][] dialogues = new String[10][10];
     public boolean collision = false;
     public String description="";
 
@@ -33,7 +32,8 @@ public abstract class Entity {
     public int worldX, worldY;
     public String direction = "down";
     int spriteNumber = 1;
-    int dialogIndex = 0;
+    public int dialogueIndex = 0;
+    public int dialogueSetNumber =0;
     public Boolean collisionOn = false;
     public boolean invincible = false;
     public boolean attacking = false;
@@ -196,7 +196,6 @@ public abstract class Entity {
 
 
         if(gp.pathFinder.search()){
-            System.out.println("path found");
             int nextX = gp.pathFinder.pathList.get(0).col*gp.tileSize;
             int nextY = gp.pathFinder.pathList.get(0).row*gp.tileSize;
 
@@ -427,11 +426,21 @@ public abstract class Entity {
     }
 
     public void speak() {
-        if (dialogs[dialogIndex] == null) {
-            dialogIndex = 0;
+    /*    if (dialogues[dialogueIndex] == null) {
+            dialogueIndex = 0;
         }
-        gp.ui.currentDialog = dialogs[dialogIndex];
-        dialogIndex++;
+        gp.ui.currentDialog = dialogues[dialogueIndex];
+        dialogueIndex++;
+
+*/    }
+
+    public void facePlayer(){
+
+    }
+    public void startDialogue(Entity entity, int setNumber){
+        gp.gameState = gp.dialogueState;
+        gp.ui.npc = entity;
+        dialogueSetNumber = setNumber;
     }
 
     /**

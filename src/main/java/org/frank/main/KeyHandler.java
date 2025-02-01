@@ -10,7 +10,7 @@ public class KeyHandler implements KeyListener {
     public boolean leftPressed;
     public boolean rightPressed;
     public boolean spacePressed;
-    public boolean tPressed;
+    public boolean showDebug;
     public boolean shootKeyPressed;
     public boolean enterPressed;
 
@@ -28,7 +28,13 @@ public class KeyHandler implements KeyListener {
 
         //DEBUG TIME
         if(code == KeyEvent.VK_T){
-            tPressed = !tPressed;
+            showDebug = !showDebug;
+        }
+        //REFRESH MAP
+        //this does work with intellij because it does handle change in ressources it just reloads the old ressource while running
+        if(code == KeyEvent.VK_R){
+            gp.tileManager.loadMap("/maps/worldMap.txt",0);
+            System.out.println("Map Refreshed");
         }
         //TITLE STATE
         if(gp.gameState == gp.titleState){
@@ -197,7 +203,8 @@ public class KeyHandler implements KeyListener {
     }
     public void dialogueState(int code){
         if(code == KeyEvent.VK_SPACE){
-            gp.gameState = gp.playState;
+            System.out.println("Space Pressed");
+            spacePressed = true;
         }
     }
     public void pauseState(int code){

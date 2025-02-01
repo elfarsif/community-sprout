@@ -5,9 +5,6 @@ import org.frank.object.Mushroom;
 
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-import java.util.Random;
-
 public class StoreClerk extends Entity {
 
     public StoreClerk(GamePanel gp) {
@@ -22,7 +19,7 @@ public class StoreClerk extends Entity {
     }
 
     public void setDialogs(){
-        dialogs[0] = "Hello there! Welcome to the store";
+        dialogues[0][0] = "Hello there! Welcome to the store";
     }
 
     public void getPlayerImage() {

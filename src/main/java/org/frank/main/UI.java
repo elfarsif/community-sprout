@@ -6,7 +6,6 @@ import org.frank.object.HealthBar;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class UI {
@@ -19,7 +18,7 @@ public class UI {
     ArrayList<Integer> messageCounter = new ArrayList<>();
     public boolean gameFinished = false;
     Graphics2D g2d;
-    public String currentDialog;
+    public String currentDialogue;
     BufferedImage backgroundImage;
     BufferedImage inventoryStrip;
     public int commandNum = 0;
@@ -195,8 +194,8 @@ public class UI {
         int textX = frameX + gp.tileSize;
         int textY = frameY + gp.tileSize*3;
 
-        currentDialog = "Are you sure you want to exit the game?";
-        g2d.drawString(currentDialog,textX,textY);
+        currentDialogue = "Are you sure you want to exit the game?";
+        g2d.drawString(currentDialogue,textX,textY);
 
         //YES
         String text = "YES";
@@ -518,8 +517,25 @@ public class UI {
         drawSubWindow(x,y,width,height);
         g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 30));
         x += gp.tileSize;
-        y += gp.tileSize;
-        g2d.drawString(currentDialog,x,y);
+       y += gp.tileSize;
+
+        //DIALOGUE PAGINATION
+        if (npc.dialogues[npc.dialogueSetNumber][npc.dialogueIndex]!=null){
+           currentDialogue = npc.dialogues[npc.dialogueSetNumber][npc.dialogueIndex];
+           if (gp.keyHandler.spacePressed){
+               if (gp.gameState == gp.dialogueState){
+                   npc.dialogueIndex++;
+                   gp.keyHandler.spacePressed = false;
+               }
+           }
+        }else{
+            npc.dialogueIndex = 0;
+            if (gp.gameState == gp.dialogueState){
+                gp.gameState = gp.playState;
+            }
+        }
+
+        g2d.drawString(currentDialogue,x,y);
     }
 
     public void drawSubWindow(int x, int y, int width, int height){

@@ -2,7 +2,6 @@ package org.frank.entity;
 
 import org.frank.main.GamePanel;
 
-import javax.imageio.ImageIO;
 import java.util.Random;
 
 public class Oscael extends Entity {
@@ -12,16 +11,24 @@ public class Oscael extends Entity {
 
         direction = "down";
         speed = 1;
+        dialogueSetNumber = -1;
 
         getPlayerImage();
         setDialogs();
     }
 
     public void setDialogs(){
-        dialogs[0] = "Hello there!";
-        dialogs[1] = "I am Oscael.";
-        dialogs[2] = "I am the guardian of this forest.";
-        dialogs[3] = "I am here to help you.";
+        dialogues[0][0] = "Hello there! Set 1";
+        dialogues[0][1] = "I am Oscael.";
+        dialogues[0][2] = "I am the guardian of this forest.";
+        dialogues[0][3] = "I am here to help you.";
+
+        dialogues[1][0] = "I am here to help you. Set 2";
+        dialogues[1][1] = "I am the guardian of this forest.";
+        dialogues[1][2] = "I am Oscael.";
+
+        dialogues[2][0] = "I am Oscael. third dialogue set";
+        dialogues[2][1] = "I am here to help you.";
     }
 
     public void getPlayerImage() {
@@ -73,10 +80,10 @@ public class Oscael extends Entity {
 
     @Override
     public void speak(){
-        super.speak();
-
+        super.facePlayer();
+        super.startDialogue(this, dialogueSetNumber);
+        dialogueSetNumber++;
         onPath = true;
-        gp.ui.addMessage(String.valueOf(onPath));
     }
 
 }
