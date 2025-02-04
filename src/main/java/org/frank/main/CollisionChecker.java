@@ -133,6 +133,12 @@ public class CollisionChecker {
         return index;
     }
 
+    /**
+     * Get the index of collision between entity and a list of target entities, like nps, IteractiveTiles, objects etc
+     * @param entity
+     * @param target
+     * @return the index of the target entity that the entity is colliding with, 999 if no collision
+     */
     public int checkEntity(Entity entity,Entity[][] target){
         int index = 999;
         for (int i = 0; i < target[1].length; i++) {
@@ -162,7 +168,7 @@ public class CollisionChecker {
 
                 if (entity.solidArea.intersects(target[gp.currentMap][i].solidArea)){
                     if (target[gp.currentMap][i] != entity){
-                        entity.collisionOn = true;
+                        updateCollisionForHoeableGrass(entity, target, i);
                         index = i;
                     }
                 }
@@ -216,5 +222,18 @@ public class CollisionChecker {
         gp.player.solidArea.y = gp.player.solidAreaDefaultY;
 
         return contactPlayer;
+    }
+    /**
+     * Update collision for hoeable grass
+     * @param entity the entity hitting the hoeable grass
+     * @param target the list of target entities being hit
+     * @param i the index of the specific target entity
+     */
+    private void updateCollisionForHoeableGrass(Entity entity, Entity[][] target, int i) {
+        if (target[gp.currentMap][i].name!=null && target[gp.currentMap][i].name.equals("hoeable-grass")){
+            entity.collisionOn = false;
+        }else{
+            entity.collisionOn = true;
+        }
     }
 }
