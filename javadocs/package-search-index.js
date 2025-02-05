@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.frank.ai"},{"l":"org.frank.entity"},{"l":"org.frank.main"},{"l":"org.frank.monster"},{"l":"org.frank.object"},{"l":"org.frank.tile"},{"l":"org.frank.tile_interactive"}];updateSearchResults();
