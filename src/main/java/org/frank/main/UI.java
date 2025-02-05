@@ -410,6 +410,27 @@ public class UI {
         //DRAW PLAYER INVENTORY
         for(int i = 0; i < gp.player.inventory.size(); i++){
             g2d.drawImage(gp.player.inventory.get(i).down1,slotX,slotY,null);
+            //display amount
+            if (gp.player.inventory.get(i).amount>1){
+
+                g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 22));
+                int amountX;
+                int amountY;
+
+                String s = ""+gp.player.inventory.get(i).amount;
+                amountX = getXforAlignToRightText(s,slotX+44);
+                amountY = slotY+gp.tileSize;
+
+                //shadow of number
+                g2d.setColor(new Color(60,60,60));
+                g2d.drawString(s,amountX+2,amountY+2);
+                //number
+                g2d.setColor(Color.WHITE);
+                g2d.drawString(s,amountX,amountY);
+
+
+            }
+
             slotX += gp.tileSize + gp.tileSize/2-8;
         }
 

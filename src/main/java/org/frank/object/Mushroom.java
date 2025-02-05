@@ -19,12 +19,13 @@ public class Mushroom extends Entity {
         type = type_consumable;
         down1 = setup("/objects/mushroom.png");
         description = "Give +10 health and +5 energy";
+        stackable = true;
     }
 
     @Override
     public void applyConsumable(Entity entity){
-        gp.gameState = gp.dialogueState;
-        gp.ui.currentDialogue = "You ate the mushroom. You feel better."+healthValue+" health";
+//        gp.gameState = gp.dialogueState;
+//        gp.ui.currentDialogue = "You ate the mushroom. You feel better."+healthValue+" health";
         entity.currentLife += healthValue;
         if (gp.player.currentLife > gp.player.maxLife){
             gp.player.currentLife = gp.player.maxLife;

@@ -35,6 +35,7 @@ public abstract class Entity {
     public int dialogueIndex = 0;
     public int dialogueSetNumber =0;
     public Boolean collisionOn = false;
+    public boolean walkOverable = false;
     public boolean invincible = false;
     public boolean attacking = false;
     public boolean alive = true;
@@ -43,6 +44,8 @@ public abstract class Entity {
     public boolean onPath = false;
     //false allows you to move camera by moving player worldX,worldY without seeing a player, give the effect of camera moving
     public boolean drawing = true;
+    // so that the player does collide with interactable ground objects like grass dirt etc
+    public boolean collidable = true;
 
     //COUNTERS
     public int invincibleCounter = 0;
@@ -76,6 +79,11 @@ public abstract class Entity {
     public int attackValue;
     public int defenseValue;
     public int projectileUseCost;
+    /**
+     * Toggle the stackability of an item in the items class
+     */
+    public boolean stackable = false;
+    public int amount = 1;
 
     //TYPE
     public int type;//0 player, 1 npc, 2 monster
@@ -86,6 +94,7 @@ public abstract class Entity {
     public final int type_consumable=6;
     public final int type_obstacle = 7;
     public final int type_axe = 8;
+    public final int type_hoe=9;
 
 
 
@@ -99,17 +108,17 @@ public abstract class Entity {
      */
     private void setDefaultSolidArea() {
         solidArea = new Rectangle();
-        solidArea.x = 12 * gp.scale;
+     /*   solidArea.x = 12 * gp.scale;
         solidArea.y = 24 * gp.scale;
-//        solidArea.x = 1;
-//        solidArea.y = 1;
+        solidArea.width = 8 * gp.scale;
+        solidArea.height = 8 * gp.scale;*/
+        solidArea.x = 0;
+        solidArea.y = 0;
+        solidArea.width = gp.tileSize;
+        solidArea.height = gp.tileSize;
+
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-//        solidArea.width = gp.tileSize-3;
-//        solidArea.height = gp.tileSize-3;
-
-        solidArea.width = 8 * gp.scale;
-        solidArea.height = 8 * gp.scale;
 
     }
 
@@ -192,7 +201,7 @@ public abstract class Entity {
         int startCol = (worldX +solidArea.x) / gp.tileSize;
         int startRow = (worldY +solidArea.y) / gp.tileSize;
 
-        gp.pathFinder.setNodes(startCol, startRow, goalCol, goalRow,this);
+        gp.pathFinder.setNodes(startCol, startRow, goalCol, goalRow);
 
 
         if(gp.pathFinder.search()){
@@ -451,6 +460,7 @@ public abstract class Entity {
         g2d.setColor(Color.WHITE);
         g2d.drawRect(screenX+solidArea.x, screenY+solidArea.y, solidArea.width, solidArea.height);
     }
+
 
 
 }

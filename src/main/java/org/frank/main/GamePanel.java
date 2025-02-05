@@ -95,7 +95,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame(){
-        gameState = titleState;
+        gameState = playState;
         assetSetter.setObject();
         assetSetter.setNPC();
         assetSetter.setMonster();
@@ -202,6 +202,9 @@ public class GamePanel extends JPanel implements Runnable {
             //ADD INTERACTIVE TILES
             for (int i = 0; i < iTiles[1].length; i++){
                 if(iTiles[currentMap][i] != null){
+                    //this way hoeable grass is not added to entities so it will always be underneath the player
+                    if (iTiles[currentMap][i].name !=null && !iTiles[currentMap][i].name.equals("hoeable-grass"))
+
                     entities.add(iTiles[currentMap][i]);
                 }
             }
@@ -240,6 +243,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             //DRAW ENTITIES
             for(Entity e : entities){
+
                 e.draw(g2d);
             }
             //EMPTY LIST

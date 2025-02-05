@@ -16,6 +16,7 @@ public class Axe extends Entity {
         attackValue = 0;
         attackArea.width = gp.tileSize;
         attackArea.height = gp.tileSize;
+
     }
 
     @Override

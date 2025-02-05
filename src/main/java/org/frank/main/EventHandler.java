@@ -65,8 +65,13 @@ public class EventHandler {
             else if (hit(0,32,9,"any")){
 //                this.oscaelMeetingCutscene();
             }
+
         }
 
+    }
+
+    private void removeGrass(int map, int col, int row) {
+        gp.ui.addMessage("You removed the grass");
     }
 
     private void switchToMap(int map, int col, int row) {

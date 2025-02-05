@@ -134,9 +134,9 @@ public class CollisionChecker {
     }
 
     /**
-     * Get the index of collision between entity and a list of target entities, like nps, IteractiveTiles, objects etc
-     * @param entity
-     * @param target
+     * Check collision between entity and a list of target entities, like nps, IteractiveTiles, objects etc
+     * @param entity the entity that is colliding
+     * @param target the list of target entities that the entity is wants to check collision with
      * @return the index of the target entity that the entity is colliding with, 999 if no collision
      */
     public int checkEntity(Entity entity,Entity[][] target){
@@ -168,7 +168,7 @@ public class CollisionChecker {
 
                 if (entity.solidArea.intersects(target[gp.currentMap][i].solidArea)){
                     if (target[gp.currentMap][i] != entity){
-                        updateCollisionForHoeableGrass(entity, target, i);
+                        updateCollisionStatusForWalkingOverInteractiveTiles(entity, target, i);
                         index = i;
                     }
                 }
@@ -224,13 +224,14 @@ public class CollisionChecker {
         return contactPlayer;
     }
     /**
-     * Update collision for hoeable grass
-     * @param entity the entity hitting the hoeable grass
-     * @param target the list of target entities being hit
+     * Changes the collisionOn status of the entity to false if the entity is colliding with is walkOverable, used for interactive tiles
+     *
+     * @param entity the entity hitting the interactive tile
+     * @param target the list of target interactive tile entities being hit
      * @param i the index of the specific target entity
      */
-    private void updateCollisionForHoeableGrass(Entity entity, Entity[][] target, int i) {
-        if (target[gp.currentMap][i].name!=null && target[gp.currentMap][i].name.equals("hoeable-grass")){
+    private void updateCollisionStatusForWalkingOverInteractiveTiles(Entity entity, Entity[][] target, int i) {
+        if (target[gp.currentMap][i].walkOverable){
             entity.collisionOn = false;
         }else{
             entity.collisionOn = true;

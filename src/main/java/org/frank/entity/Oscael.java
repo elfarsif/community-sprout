@@ -4,6 +4,9 @@ import org.frank.main.GamePanel;
 
 import java.util.Random;
 
+/**
+ * This class represents the oscael character in the game.
+ */
 public class Oscael extends Entity {
 
     public Oscael(GamePanel gp) {
@@ -12,8 +15,10 @@ public class Oscael extends Entity {
         direction = "down";
         speed = 1;
         dialogueSetNumber = -1;
+        solidArea.width = 8 * gp.scale;
+        solidArea.height = 8 * gp.scale;
 
-        getPlayerImage();
+        initializePlayerImage();
         setDialogs();
     }
 
@@ -31,7 +36,7 @@ public class Oscael extends Entity {
         dialogues[2][1] = "I am here to help you.";
     }
 
-    public void getPlayerImage() {
+    public void initializePlayerImage() {
         up1 = this.setup("/npc/character.png");
         up2 = this.setup("/npc/character.png");
         down1 = this.setup("/npc/character.png");
@@ -42,6 +47,9 @@ public class Oscael extends Entity {
         right2 = this.setup("/npc/character.png");
     }
 
+    /**
+     * This method sets the action/movement of Oscael.
+     */
     @Override
     public void setAction(){
         if (onPath){
@@ -53,7 +61,7 @@ public class Oscael extends Entity {
 
 
         }else {
-
+            //Walk around randomly
             actionLookCounter++;
             if (actionLookCounter == 120) {
                 Random random = new Random();
@@ -80,8 +88,8 @@ public class Oscael extends Entity {
 
     @Override
     public void speak(){
-        super.facePlayer();
-        super.startDialogue(this, dialogueSetNumber);
+        this.facePlayer();
+        this.startDialogue(this, dialogueSetNumber);
         dialogueSetNumber++;
         onPath = true;
     }

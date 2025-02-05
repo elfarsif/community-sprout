@@ -15,14 +15,6 @@ public class PineTree extends InteractiveTile {
         currentLife = 3;
     }
 
-    public PineTree(GamePanel gp, int worldX, int worldY) {
-        super(gp);
-        this.gp = gp;
-        down1 = setup("/objects/pine-tree.png");
-        down2 = setup("/objects/pine-tree.png");
-        this.worldX = worldX*gp.tileSize;
-        this.worldY = worldY*gp.tileSize;
-    }
 
     public boolean isCorrectTool(Entity entity){
         boolean correctTool = false;

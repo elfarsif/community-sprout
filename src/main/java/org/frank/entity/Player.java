@@ -99,7 +99,6 @@ public class Player extends Entity {
     public void setItems(){
         inventory.add(new Sword(gp));
         inventory.add(new Mushroom(gp));
-        inventory.add(new Mushroom(gp));
     }
 
     public void getPlayerImage() {
@@ -196,6 +195,27 @@ public class Player extends Entity {
 
         }
 
+        if (currentWeapon.type == type_hoe){
+            attackDown1 = setup("/player/attack/hoe/down1.png");
+            attackDown2 = setup("/player/attack/hoe/down2.png");
+            attackDown3 = setup("/player/attack/hoe/down3.png");
+            attackDown4 = setup("/player/attack/hoe/down4.png");
+            attackUp1 = setup("/player/attack/hoe/up1.png");
+            attackUp2 = setup("/player/attack/hoe/up2.png");
+            attackUp3 = setup("/player/attack/hoe/up3.png");
+            attackUp4 = setup("/player/attack/hoe/up4.png");
+            attackLeft1 = setup("/player/attack/hoe/left1.png");
+            attackLeft2 = setup("/player/attack/hoe/left2.png");
+            attackLeft3 = setup("/player/attack/hoe/left3.png");
+            attackLeft4 = setup("/player/attack/hoe/left4.png");
+            attackRight1 = setup("/player/attack/hoe/right1.png");
+            attackRight2 = setup("/player/attack/hoe/right2.png");
+            attackRight3 = setup("/player/attack/hoe/right3.png");
+            attackRight4 = setup("/player/attack/hoe/right4.png");
+        }
+
+
+
     }
 
     public void update() {
@@ -253,6 +273,8 @@ public class Player extends Entity {
 
             //check interactive tile collision
             int iTileIndex = gp.collisionChecker.checkEntity(this, gp.iTiles);
+
+
 
             //check event
             gp.eventHandler.checkEvent();
@@ -463,14 +485,27 @@ public class Player extends Entity {
             spriteCounter = 0;
         }
     }
-
+    /**
+     * Pressing space interacts with npc, if youre not interacting with npc then attack, or apply consumable
+     * @param i index of the npc
+     */
     private void interactNPC(int i) {
         if (gp.keyHandler.spacePressed) {
             if (i != 999) {
                 gp.npc[gp.currentMap][i].speak();
             } else {
-                gp.playSoundEffect(3);
-                attacking = true;
+                if(currentWeapon.type!=type_consumable){
+                    attacking = true;
+                    gp.playSoundEffect(3);
+                }else{
+                    currentWeapon.applyConsumable(this);
+                    if (currentWeapon.amount>1){
+                        currentWeapon.amount--;
+                    }else{
+                        int itemIndex = gp.ui.getItemIndexOnSlot();
+                        inventory.remove(itemIndex);
+                    }
+                }
             }
         }
 //        gp.keyHandler.spacePressed = false;
@@ -484,10 +519,11 @@ public class Player extends Entity {
                 if (keyHandler.spacePressed == true){
                     gp.objects[gp.currentMap][objectIndex].interact();
                 }
+
             }else{
+                //Inventory items
                 String text;
-                if (inventory.size() != maxInventorySize) {
-                    inventory.add(gp.objects[gp.currentMap][objectIndex]);
+                if (canObtainItem(gp.objects[gp.currentMap][objectIndex])) {
                     text = "You picked up " + gp.objects[gp.currentMap][objectIndex].name;
                 }else {
                     text = "inventory is full";
@@ -498,14 +534,19 @@ public class Player extends Entity {
 
         }
     }
-
+    /**
+     * Select an item from the inventory and set it as the current weapon to be used
+     */
     public void selectItem(){
         int itemIndex = gp.ui.getItemIndexOnSlot();
         if (itemIndex < inventory.size()){
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.type == type_sword || selectedItem.type == type_sword_copper ||
-                    selectedItem.type== type_axe){
+            if (selectedItem.type == type_sword
+                    || selectedItem.type == type_sword_copper
+                    || selectedItem.type== type_axe
+                    || selectedItem.type == type_hoe
+            ){
                 currentWeapon = selectedItem;
                 attack = getAttackValue();
                 getPlayerAttackImage();
@@ -517,10 +558,56 @@ public class Player extends Entity {
             }
 
             if (selectedItem.type == type_consumable){
-                /*selectedItem.applyConsumable(this);
-                inventory.remove(itemIndex);*/
+                currentWeapon = selectedItem;
             }
         }
+    }
+    /**
+     * Whenever we get an item, we check if it is already in the inventory using item name
+     * @param itemName
+     * @return index of the item in the inventory or 999 if not found
+     */
+    public int searchItemInInventory(String itemName){
+        int itemIndex =999;
+        for (int i = 0; i<inventory.size(); i++){
+            if (inventory.get(i).name.equals(itemName)){
+                itemIndex = i;
+                break;
+            }
+        }
+        return itemIndex;
+    }
+    /**
+     * Check various conditions before obtaining an item, and add the item to the inventory
+     * @param item the item to be obtained
+     * @return true if the item can be obtained, false otherwise
+     */
+    public boolean canObtainItem(Entity item){
+        boolean canObtain = false;
+
+        //CHECK IF STACKABLE
+        if (item.stackable) {
+            int itemIndex = searchItemInInventory(item.name);
+            if (itemIndex != 999) {
+                inventory.get(itemIndex).amount++;
+                canObtain = true;
+            }else {
+                //new item check vacancy
+                if (inventory.size() < maxInventorySize) {
+                    inventory.add(item);
+                    canObtain = true;
+                }
+            }
+        }else {
+            //not stackable, so check vacancy
+            if (inventory.size() < maxInventorySize) {
+                inventory.add(item);
+                canObtain = true;
+            }
+
+        }
+
+        return canObtain;
     }
 
     public void draw(Graphics2D g2d) {
@@ -705,6 +792,9 @@ public class Player extends Entity {
         //prevent UI from being transparent
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         this.drawCollisionArea(g2d,screenX,screenY);
+
+
+
     }
 
 }
