@@ -546,6 +546,7 @@ public class Player extends Entity {
                     || selectedItem.type == type_sword_copper
                     || selectedItem.type== type_axe
                     || selectedItem.type == type_hoe
+                    || selectedItem.type == type_watering_can
             ){
                 currentWeapon = selectedItem;
                 attack = getAttackValue();

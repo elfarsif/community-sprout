@@ -7,37 +7,35 @@ import org.frank.main.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-public class HoeableGrass extends InteractiveTile {
+public class Soil extends InteractiveTile {
     GamePanel gp;
 
-    public HoeableGrass(GamePanel gp) {
+
+    public Soil(GamePanel gp, int worldX, int worldY) {
         super(gp);
         this.gp = gp;
-        name = "hoeable-grass";
-        down1 = setup("/tiles/grass-plain.png");
-        down2 = setup("/tiles/grass-plain.png");
-        destructible = true;
+        down1 = setup("/tiles/farming/soil.png");
+        down2 = setup("/tiles/farming/soil.png");
+        this.worldX = worldX*gp.tileSize;
+        this.worldY = worldY*gp.tileSize;
         currentLife = 1;
         walkOverable = true;
-
-
-
-
+        makeDestructible();
     }
+
 
     public boolean isCorrectTool(Entity entity){
         boolean correctTool = false;
-        if(entity.currentWeapon.type== type_hoe){
+        if(entity.currentWeapon.type== type_watering_can){
             correctTool = true;
         }
         return correctTool;
     }
 
     public InteractiveTile getDestroyedTile(){
-        InteractiveTile soil = new Soil(gp, worldX/gp.tileSize, worldY/gp.tileSize);
-        return soil;
+        InteractiveTile wateredSoil = new WateredSoil(gp, worldX/gp.tileSize, worldY/gp.tileSize);
+        return wateredSoil;
     }
-
 
 
     @Override

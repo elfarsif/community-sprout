@@ -17,16 +17,7 @@ public class PineTreeTrunk extends InteractiveTile{
         makeDestructible();
     }
 
-    private void makeDestructible() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000); // Delay for 1 second
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            destructible = true;
-        }).start();
-    }
+
 
     public boolean isCorrectTool(Entity entity){
         boolean correctTool = false;

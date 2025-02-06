@@ -45,6 +45,10 @@ public class AssetSetter {
         gp.objects[mapNum][6].worldX = 40 * gp.tileSize;
         gp.objects[mapNum][6].worldY = 10 * gp.tileSize;
 
+        gp.objects[mapNum][7] = new WateringCan(gp);
+        gp.objects[mapNum][7].worldX = 41 * gp.tileSize;
+        gp.objects[mapNum][7].worldY = 10 * gp.tileSize;
+
 
     }
 
