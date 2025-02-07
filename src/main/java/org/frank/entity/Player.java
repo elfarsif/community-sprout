@@ -214,6 +214,25 @@ public class Player extends Entity {
             attackRight4 = setup("/player/attack/hoe/right4.png");
         }
 
+        if (currentWeapon.type == type_watering_can){
+            attackDown1 = setup("/player/attack/watering/down1.png");
+            attackDown2 = attackDown1;
+            attackDown3 = setup("/player/attack/watering/down2.png");
+            attackDown4 = attackDown3;
+            attackUp1 = setup("/player/attack/watering/up1.png");
+            attackUp2 = attackUp1;
+            attackUp3 = setup("/player/attack/watering/up2.png");
+            attackUp4 = attackUp3;
+            attackLeft1 = setup("/player/attack/watering/left1.png");
+            attackLeft2 = attackLeft1;
+            attackLeft3 = setup("/player/attack/watering/left2.png");
+            attackLeft4 = attackLeft3;
+            attackRight1 = setup("/player/attack/watering/right1.png");
+            attackRight2 = attackRight1;
+            attackRight3 = setup("/player/attack/watering/right2.png");
+            attackRight4 = attackRight3;
+        }
+
 
 
     }
