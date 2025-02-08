@@ -3,6 +3,7 @@ package org.frank.main;
 import org.frank.ai.PathFinder;
 import org.frank.entity.Entity;
 import org.frank.entity.Player;
+import org.frank.environment.EnvironmentManager;
 import org.frank.tile.Map;
 import org.frank.tile.TileManager;
 import org.frank.tile_interactive.InteractiveTile;
@@ -54,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     Config config = new Config(this);
     public PathFinder pathFinder = new PathFinder(this);
     public CutsceneManager cutsceneManager = new CutsceneManager(this);
+    public EnvironmentManager environmentManager = new EnvironmentManager(this);
 
     //ENTITIES AND OBJECTS
     public Player player = new Player(this, keyHandler);
@@ -100,6 +102,8 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setNPC();
         assetSetter.setMonster();
         assetSetter.setInteractiveTiles();
+        environmentManager.setup();
+
         playMusic(0);
 
         tempScreen = new BufferedImage(screenWidth,screenHeight,BufferedImage.TYPE_INT_ARGB);
@@ -250,6 +254,8 @@ public class GamePanel extends JPanel implements Runnable {
             entities.clear();
             //DRAW CUSTSCENE
             cutsceneManager.draw(g2d);
+            //DRAW ENVIRONMENT
+            environmentManager.draw(g2d);
             //UI
             ui.draw(g2d);
 
